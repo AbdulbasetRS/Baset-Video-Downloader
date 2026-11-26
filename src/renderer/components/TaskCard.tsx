@@ -67,16 +67,17 @@ export function TaskCard({ task, mode, selected, onToggleSelect, onPause, onResu
 
   async function saveOptions() {
     if (draft.startTime || draft.endTime) {
-      const start = draft.startTime ? timeToSeconds(draft.startTime) : null
-      const end = draft.endTime ? timeToSeconds(draft.endTime) : null
-      if (start === null || end === null) { setOptionsError(t.home.timeRangeRequired); return }
+      if (!draft.startTime?.trim() || !draft.endTime?.trim()) { setOptionsError(t.home.timeRangeRequired); return }
+      const start = timeToSeconds(draft.startTime)
+      const end = timeToSeconds(draft.endTime)
+      if (start === null || end === null) { setOptionsError(t.home.timeRangeInvalid); return }
       if (end <= start) { setOptionsError(t.home.timeRangeOrder); return }
       if (task.durationSeconds !== null && end > task.durationSeconds) { setOptionsError(t.home.timeRangeBeyondDuration); return }
     }
     setSavingOptions(true)
     setOptionsError(null)
     try {
-      await window.bvd.downloads.updateOptions(task.id, draft)
+      await window.bvd.downloads.updateOptions(task.id, { ...draft, startTime: draft.startTime?.trim() || null, endTime: draft.endTime?.trim() || null })
       setEditingOptions(false)
     } catch (error) {
       setOptionsError(error instanceof Error ? error.message : String(error))
