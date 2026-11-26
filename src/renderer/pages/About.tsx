@@ -35,11 +35,19 @@ export function AboutPage() {
       <section className="panel"><dl className="about__grid">
         <dt>{t.about.version}</dt><dd className="ltr">{appInfo?.version ?? '-'}</dd>
         <dt>{t.about.buildType}</dt><dd>{appInfo?.isPackaged ? (appInfo.portable ? 'Portable' : t.about.buildPackaged) : t.about.buildDev}</dd>
-        <dt>{t.about.developer}</dt><dd>{APP_CONFIG.developer.name}</dd>
-        <dt>{t.about.profile}</dt><dd><ExternalLinkButton url={APP_CONFIG.developer.profileUrl} label={t.about.profile}><span className="ltr">{APP_CONFIG.developer.profileUrl}</span></ExternalLinkButton></dd>
-        <dt>{t.about.repository}</dt><dd><ExternalLinkButton url={APP_CONFIG.github.repositoryUrl} label={t.about.repository}><span className="ltr">{APP_CONFIG.github.repositoryUrl}</span></ExternalLinkButton></dd>
+        <dt>{t.about.developer}</dt><dd><ExternalLinkButton url={APP_CONFIG.developer.profileUrl} label={t.about.profile}>{APP_CONFIG.developer.name}</ExternalLinkButton></dd>
+        <dt>{t.about.repository}</dt><dd><ExternalLinkButton url={APP_CONFIG.github.repositoryUrl} label={t.about.repository}><span className="ltr">{APP_CONFIG.github.owner}/{APP_CONFIG.github.repo}</span></ExternalLinkButton></dd>
         <dt>{t.about.license}</dt><dd>{t.about.licenseStatus}</dd>
       </dl></section>
+      <section className="panel about__links">
+        <h2>{t.about.connect}</h2>
+        <div className="about__link-grid">
+          {APP_CONFIG.links.map((item) => <div className="about__link" key={item.label}>
+            <span>{item.label}</span>
+            <ExternalLinkButton url={item.url} label={item.label}>{item.action ?? item.label}</ExternalLinkButton>
+          </div>)}
+        </div>
+      </section>
       <section className="panel">
         <h2>{t.about.updates}</h2>
         <div className="row">
