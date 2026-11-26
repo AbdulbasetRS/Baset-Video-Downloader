@@ -78,7 +78,7 @@ describe('BVD application shell', () => {
     const footer = screen.getByRole('contentinfo')
     expect(footer).toHaveTextContent('AbdulBaset R. Sayed')
     expect(footer).toHaveTextContent('0.2.0')
-    expect(footer).toHaveTextContent('AbdulbasetRS/Baset-Video-Downloader')
+    expect(footer).toHaveTextContent(/AbdulbasetRS\/Baset-Video-Downloader/i)
   })
 })
 
