@@ -358,6 +358,7 @@ function startTask(task: DownloadTask): void {
       const processStdoutLine = (line: string) => {
         // yt-dlp may emit the final after_move marker without a trailing newline.
         // Search within the line instead of requiring the marker at character zero.
+        // eslint-disable-next-line no-control-regex -- Remove ANSI terminal styling before parsing downloader markers.
         const cleanLine = line.replace(/\u001b\[[0-?]*[ -/]*[@-~]/g, '')
         const markerIndex = cleanLine.indexOf('__BVD_FILE__')
         if (markerIndex >= 0) {
