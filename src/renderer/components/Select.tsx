@@ -39,6 +39,7 @@ export function Select({ value, options, onChange, label, disabled = false, clas
     if (option.disabled) return
     onChange(option.value)
     setOpen(false)
+    rootRef.current?.querySelector<HTMLButtonElement>('.custom-select__trigger')?.focus()
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
