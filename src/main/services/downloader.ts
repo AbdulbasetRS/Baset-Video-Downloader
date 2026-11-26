@@ -328,21 +328,25 @@ function startTask(task: DownloadTask): void {
       children.set(task.id, record)
       const initial = updateTask(task.id, { status: 'Downloading', errorMessage: null })
       if (initial) notify('downloadStarted', initial.title)
+      const processStdoutLine = (line: string) => {
+        // yt-dlp may emit the final after_move marker without a trailing newline.
+        // Search within the line instead of requiring the marker at character zero.
+        const markerIndex = line.indexOf('__BVD_FILE__')
+        if (markerIndex >= 0) {
+          const file = line.slice(markerIndex + '__BVD_FILE__'.length).trim()
+          if (file) updateTask(task.id, { outputPath: file })
+        }
+        const current = readTasks().find((x) => x.id === task.id)
+        if (current) {
+          const next = parseProgressLine(line, current)
+          if (next !== current && Date.now() - record.lastPersist > 350) { record.lastPersist = Date.now(); saveTask(next) }
+        }
+      }
       const stdoutHandler = (chunk: Buffer) => {
         record.stdoutBuffer += chunk.toString('utf8')
-        const lines = record.stdoutBuffer.split(/\r?\n/)
+        const lines = record.stdoutBuffer.split(/[\r\n]+/)
         record.stdoutBuffer = lines.pop() || ''
-        for (const line of lines) {
-          if (line.startsWith('__BVD_FILE__')) {
-            const file = line.slice('__BVD_FILE__'.length).trim()
-            if (file) updateTask(task.id, { outputPath: file })
-          }
-          const current = readTasks().find((x) => x.id === task.id)
-          if (current) {
-            const next = parseProgressLine(line, current)
-            if (next !== current && Date.now() - record.lastPersist > 350) { record.lastPersist = Date.now(); saveTask(next) }
-          }
-        }
+        for (const line of lines) processStdoutLine(line)
       }
       child.stdout?.on('data', stdoutHandler)
       child.stderr?.on('data', (chunk: Buffer) => { record.stderr = (record.stderr + chunk.toString('utf8')).slice(-6000) })
@@ -357,6 +361,9 @@ function startTask(task: DownloadTask): void {
         void pumpQueue()
       })
       child.once('close', async (code) => {
+        // Process any final stdout fragment before reading the task's outputPath.
+        if (record.stdoutBuffer.trim()) processStdoutLine(record.stdoutBuffer)
+        record.stdoutBuffer = ''
         children.delete(task.id)
         if (record.stopReason) { void pumpQueue(); return }
         const current = readTasks().find((x) => x.id === task.id)
@@ -364,7 +371,10 @@ function startTask(task: DownloadTask): void {
         if (code === 0) {
           let file = current.outputPath || null
           if (file) {
-            try { await access(file) } catch { file = null }
+            try {
+              const outputStat = await stat(file)
+              if (!outputStat.isFile() || outputStat.size <= 0) file = null
+            } catch { file = null }
           }
           if (!file) {
             const failed = updateTask(task.id, { status: 'Failed', speedBytesPerSec: null, etaSeconds: null, errorMessage: 'The downloader finished without producing a verifiable output file.' })
