@@ -1,3 +1,13 @@
+const EXTERNAL_LINKS: readonly { label: string; action: string; url: string }[] = [
+    { label: 'LinkedIn', action: 'LinkedIn', url: 'https://www.linkedin.com/in/abdulbaset-r-sayed' },
+    { label: 'Instagram', action: 'Instagram', url: 'https://www.instagram.com/abdulbaset_rs/' },
+    { label: 'Facebook', action: 'Facebook', url: 'https://www.facebook.com/AbdulBasetRedaSayed/' },
+    { label: 'X', action: 'X', url: 'https://x.com/AbdulBasetRS' },
+    { label: 'Buy Me a Coffee', action: 'Support on Buy Me a Coffee', url: 'https://buymeacoffee.com/abdulbaset' },
+    { label: 'GitHub Sponsors', action: 'Become a Sponsor', url: 'https://github.com/sponsors/AbdulbasetRS' },
+    { label: 'PayPal', action: 'Donate via PayPal', url: 'https://paypal.me/abdulbasetrs' }
+  ]
+
 /**
  * Central, typed application configuration.
  * Owner/repository live ONLY here. Nothing in this file is a secret.
@@ -19,6 +29,7 @@ export const APP_CONFIG = {
     // Repository owner and write access were confirmed through the connected GitHub account.
     ownershipConfirmed: true
   },
+  links: EXTERNAL_LINKS,
   updates: {
     liveChecksEnabled: true
   },
@@ -32,5 +43,6 @@ export const APP_CONFIG = {
 export const ALLOWED_EXTERNAL_PREFIXES: readonly string[] = [
   APP_CONFIG.developer.profileUrl,
   APP_CONFIG.github.repositoryUrl,
-  APP_CONFIG.github.releasesUrl
+  APP_CONFIG.github.releasesUrl,
+  ...APP_CONFIG.links.map((item) => item.url)
 ]

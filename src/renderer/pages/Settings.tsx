@@ -70,7 +70,7 @@ export function SettingsPage() {
           {section === 'downloads' && <>
             <div className="setting"><div><div className="setting__label">{t.settings.downloads.folder}</div><div className="setting__hint">{settings.defaultOutputDirectory || t.common.unknown}</div></div><button className="btn" onClick={() => void chooseFolder()}><FolderOpen size={16} aria-hidden="true" />{t.settings.downloads.chooseFolder}</button></div>
             <div className="setting"><div><div className="setting__label">{t.settings.downloads.concurrency}</div><div className="setting__hint">{t.settings.downloads.concurrencyHint}</div></div><select className="field" value={settings.maxConcurrentDownloads} onChange={(e) => void update({ maxConcurrentDownloads: Number(e.target.value) })}><option value={1}>1</option><option value={2}>2</option><option value={3}>3</option><option value={4}>4</option><option value={5}>5</option></select></div>
-            <div className="row"><button className="btn" onClick={() => void window.bvd.downloads.openDefaultFolder()}><FolderOpen size={16} aria-hidden="true" />{t.settings.downloads.openFolder}</button></div>
+            <div className="row settings__actions"><button className="btn" onClick={() => void window.bvd.downloads.openDefaultFolder()}><FolderOpen size={16} aria-hidden="true" />{t.settings.downloads.openFolder}</button></div>
           </>}
 
           {section === 'notifications' && <>
@@ -83,10 +83,10 @@ export function SettingsPage() {
               <div className="notification-table__head"><span>{t.settings.notifications.event}</span><span>{t.settings.notifications.inAppCol}</span><span>{t.settings.notifications.desktopCol}</span><span>{t.settings.notifications.soundCol}</span><span></span></div>
               {EVENT_ROWS.map((row) => <div className="notification-table__row" key={row.key}>
                 <strong>{t.settings.notifications[row.label]}</strong>
-                <input type="checkbox" checked={settings.notifications.events[row.key]?.inApp ?? false} onChange={(e) => void updateEvent(row.key, 'inApp', e.target.checked)} aria-label={`${t.settings.notifications[row.label]} ${t.settings.notifications.inAppCol}`} />
-                <input type="checkbox" checked={settings.notifications.events[row.key]?.desktop ?? false} onChange={(e) => void updateEvent(row.key, 'desktop', e.target.checked)} aria-label={`${t.settings.notifications[row.label]} ${t.settings.notifications.desktopCol}`} />
-                <input type="checkbox" checked={settings.notifications.events[row.key]?.sound ?? false} onChange={(e) => void updateEvent(row.key, 'sound', e.target.checked)} aria-label={`${t.settings.notifications[row.label]} ${t.settings.notifications.soundCol}`} />
-                <button className="btn btn--sm" onClick={() => void runAction(() => window.bvd.notifications.pickSound(row.key), t.settings.notifications.choose)}>{t.settings.notifications.choose}</button>
+                <label className="notification-cell"><span>{t.settings.notifications.inAppCol}</span><input type="checkbox" checked={settings.notifications.events[row.key]?.inApp ?? false} onChange={(e) => void updateEvent(row.key, 'inApp', e.target.checked)} /></label>
+                <label className="notification-cell"><span>{t.settings.notifications.desktopCol}</span><input type="checkbox" checked={settings.notifications.events[row.key]?.desktop ?? false} onChange={(e) => void updateEvent(row.key, 'desktop', e.target.checked)} /></label>
+                <label className="notification-cell"><span>{t.settings.notifications.soundCol}</span><input type="checkbox" checked={settings.notifications.events[row.key]?.sound ?? false} onChange={(e) => void updateEvent(row.key, 'sound', e.target.checked)} /></label>
+                <button className="btn btn--sm notification-table__choose" onClick={() => void runAction(() => window.bvd.notifications.pickSound(row.key), t.settings.notifications.choose)}>{t.settings.notifications.choose}</button>
               </div>)}
             </div>
             <div className="row" style={{ marginTop: 14 }}>

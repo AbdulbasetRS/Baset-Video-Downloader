@@ -73,12 +73,15 @@ describe('BVD application shell', () => {
     expect(screen.queryByText('Sample tutorial video')).not.toBeInTheDocument()
   })
 
-  it('shows developer attribution, version and repository in the footer', async () => {
-    await renderApp()
+  it('shows developer attribution, version and opens the repository from the footer', async () => {
+    const user = userEvent.setup()
+    const { api } = await renderApp()
     const footer = screen.getByRole('contentinfo')
     expect(footer).toHaveTextContent('AbdulBaset R. Sayed')
     expect(footer).toHaveTextContent('0.2.0')
-    expect(footer).toHaveTextContent(/AbdulbasetRS\/Baset-Video-Downloader/i)
+
+    await user.click(within(footer).getByRole('button', { name: 'Repository' }))
+    expect(api.external.open).toHaveBeenCalledWith('https://github.com/AbdulBasetRS/Baset-Video-Downloader')
   })
 })
 

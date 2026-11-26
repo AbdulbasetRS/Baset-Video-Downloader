@@ -52,7 +52,7 @@ if ($env:GITHUB_TOKEN) {
   $ffHeaders['Authorization'] = "Bearer $($env:GITHUB_TOKEN)"
 }
 $ffRelease = Invoke-RestMethod -Uri 'https://api.github.com/repos/FFmpeg-Builds/FFmpeg-Builds/releases/latest' -Headers $ffHeaders
-$ffAsset = $ffRelease.assets | Where-Object { $_.name -match '^ffmpeg-n8\.1\..*-win64-lgpl-8\.1\.zip$' } | Select-Object -First 1
+$ffAsset = $ffRelease.assets | Where-Object { $_.name -like 'ffmpeg-n8.1-*-win64-lgpl-8.1.zip' } | Select-Object -First 1
 if (-not $ffAsset) { throw "Could not find a current win64 LGPL static FFmpeg archive in release $($ffRelease.tag_name)." }
 $ff = @{ Release = $ffRelease; Asset = $ffAsset }
 $ffArchive = Join-Path $tempRoot 'ffmpeg-lgpl-static.zip'
