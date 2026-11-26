@@ -179,7 +179,7 @@ export function HomePage() {
         </div>
         {previewResults.map((bundle, bundleIndex) => <div className="preview-bundle" key={bundle.sourceUrl}>
           <div className="preview-bundle__heading">
-            <div><strong>{bundle.preview.title}</strong><div className="setting__hint ltr">{bundle.preview.sourceName}</div></div>
+            <div>{bundle.preview.isPlaylist && <strong>{bundle.preview.title}</strong>}<div className="setting__hint ltr">{bundle.preview.sourceName}</div></div>
             <div className="row">
               <button className="btn btn--sm" onClick={() => selectAll(bundleIndex, bundle.selectedUrls.length !== bundle.items.length)}>
                 {bundle.selectedUrls.length === bundle.items.length ? <CheckSquare size={14} aria-hidden="true" /> : <Square size={14} aria-hidden="true" />}
