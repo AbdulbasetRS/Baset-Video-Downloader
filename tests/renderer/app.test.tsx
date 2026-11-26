@@ -81,7 +81,7 @@ describe('BVD application shell', () => {
     expect(footer).toHaveTextContent('0.2.0')
 
     await user.click(within(footer).getByRole('button', { name: 'Repository' }))
-    expect(api.external.open).toHaveBeenCalledWith('https://github.com/AbdulbasetRS/Baset-Video-Downloader')
+    expect(api.external.open).toHaveBeenCalledWith('https://github.com/AbdulBasetRS/Baset-Video-Downloader')
   })
 })
 
