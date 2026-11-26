@@ -43,7 +43,12 @@ for (const d of SCAN_DIRS) {
     const text = readFileSync(abs, 'utf8')
 
     if (emoji.test(text)) violations.push(`${rel}: contains emoji`)
-    if (PLATFORM_WORDS.test(text) && !rel.startsWith(join('src', 'shared', 'url')) ) violations.push(`${rel}: names a platform (platform names/logos are not allowed in shipped sources)`)
+    // Explicit social/support destinations are allowed in the central external-link registry.
+    // The rule still scans the rest of the file and all shipped UI sources for platform branding.
+    const platformScanText = rel === join('src', 'shared', 'config.ts')
+      ? text.replace(/const EXTERNAL_LINKS[\\s\\S]*?\\n  \\]/, '')
+      : text
+    if (PLATFORM_WORDS.test(platformScanText) && !rel.startsWith(join('src', 'shared', 'url'))) violations.push(`${rel}: names a platform (platform names/logos are not allowed in shipped sources)`)
     // Gradients are forbidden in app styles and markup. Brand SVG logo files are the approved exception.
     if (!inBrand && /(linear|radial|conic|repeating-linear|repeating-radial)-gradient\s*\(/i.test(text)) violations.push(`${rel}: CSS gradient`)
     if (!inBrand && /url\(\s*['"]?(?!data:)[^)'"]+\.(png|jpe?g|gif|webp|svg)/i.test(text) && ext === '.css') violations.push(`${rel}: CSS background/image url()`)
