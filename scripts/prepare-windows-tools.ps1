@@ -53,7 +53,8 @@ $ffArchive = Join-Path $tempRoot 'ffmpeg-lgpl-shared.zip'
 $ffExtract = Join-Path $tempRoot 'ffmpeg-extracted'
 Invoke-WebRequest -Uri $ff.Asset.browser_download_url -OutFile $ffArchive
 if (Test-Path $ffExtract) { Remove-Item $ffExtract -Recurse -Force }
-Expand-Archive -Path $ffArchive -DestinationPath $ffExtract -Force
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+[System.IO.Compression.ZipFile]::ExtractToDirectory($ffArchive, $ffExtract)
 $bin = Get-ChildItem -Path $ffExtract -Directory -Recurse | Where-Object { (Test-Path (Join-Path $_.FullName 'ffmpeg.exe')) -and (Test-Path (Join-Path $_.FullName 'ffprobe.exe')) } | Select-Object -First 1
 if (-not $bin) { throw 'FFmpeg archive did not contain ffmpeg.exe and ffprobe.exe.' }
 Get-ChildItem $ffmpegRoot -Force | Remove-Item -Recurse -Force
