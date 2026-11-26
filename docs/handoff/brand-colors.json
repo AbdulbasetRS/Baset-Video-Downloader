@@ -1,0 +1,25 @@
+{
+  "brand": "Baset Video Downloader",
+  "acronym": "BVD",
+  "colors": {
+    "primary": "#2563EB",
+    "primaryLight": "#38BDF8",
+    "primaryDark": "#1D4ED8",
+    "navy": "#0B1120",
+    "surfaceDark": "#151F32",
+    "textDark": "#F1F5F9",
+    "lightBackground": "#F5F7FB",
+    "lightSurface": "#FFFFFF",
+    "textLight": "#0F172A",
+    "success": "#22C55E",
+    "warning": "#F59E0B",
+    "danger": "#EF4444",
+    "info": "#38BDF8",
+    "muted": "#64748B"
+  },
+  "typography": {
+    "english": "Manrope",
+    "arabic": "Cairo",
+    "fallback": "Segoe UI, sans-serif"
+  }
+}

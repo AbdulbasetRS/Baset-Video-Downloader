@@ -1,0 +1,15 @@
+{
+  "sampleRate": 22050,
+  "channels": 1,
+  "format": "WAV PCM 16-bit",
+  "defaultVolumePercent": 40,
+  "files": {
+    "downloadQueued": "download-queued.wav",
+    "downloadStarted": "download-started.wav",
+    "downloadCompleted": "download-completed.wav",
+    "downloadFailed": "download-failed.wav",
+    "downloadPaused": "download-paused.wav",
+    "downloadResumed": "download-resumed.wav",
+    "updateAvailable": "update-available.wav"
+  }
+}

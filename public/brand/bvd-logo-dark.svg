@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="180" viewBox="0 0 900 180" role="img" aria-label="Baset Video Downloader logo for dark backgrounds">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse"><stop stop-color="#38BDF8"/><stop offset=".48" stop-color="#2563EB"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient>
+  </defs>
+  <g transform="translate(12 12) scale(1.2)">
+    <rect x="5" y="5" width="118" height="118" rx="30" fill="url(#bg)"/>
+    <g fill="#DCEBFF" opacity=".9"><rect x="15" y="48" width="9" height="9" rx="2.5"/><rect x="15" y="64" width="9" height="9" rx="2.5" opacity=".68"/><rect x="27" y="57" width="7" height="7" rx="2" opacity=".78"/></g>
+    <path d="M48 31.5c-3.8-2.2-8.5.55-8.5 4.95v42.9c0 4.4 4.7 7.15 8.5 4.95l36.8-21.45c3.8-2.2 3.8-7.7 0-9.9L48 31.5Z" fill="#fff"/>
+    <circle cx="91" cy="91" r="25" fill="#0B1B3A" stroke="#93C5FD" stroke-width="2.5"/>
+    <path d="M91 75v25m0 0-10-10m10 10 10-10M77 104v4c0 2.2 1.8 4 4 4h20c2.2 0 4-1.8 4-4v-4" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="190" y="91" fill="#F8FAFC" font-family="Manrope, Segoe UI, Arial, sans-serif" font-size="49" font-weight="750" letter-spacing="-1.6">Baset Video</text>
+  <text x="190" y="143" fill="#F8FAFC" font-family="Manrope, Segoe UI, Arial, sans-serif" font-size="49" font-weight="750" letter-spacing="-1.6">Downloader</text>
+  <text x="738" y="123" fill="#60A5FA" font-family="Manrope, Segoe UI, Arial, sans-serif" font-size="28" font-weight="800" text-anchor="middle">BVD</text>
+</svg>

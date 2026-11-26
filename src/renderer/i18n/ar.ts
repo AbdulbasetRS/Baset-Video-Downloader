@@ -1,0 +1,40 @@
+import type { Dict } from './en'
+
+export const ar: Dict = {
+  app: { starting: 'جارٍ تشغيل التطبيق', loadingSettings: 'جارٍ تحميل تفضيلاتك' },
+  nav: { home: 'الرئيسية', downloads: 'التحميلات', history: 'السجل', settings: 'الإعدادات', about: 'حول', collapse: 'طيّ الشريط الجانبي', expand: 'توسيع الشريط الجانبي', primary: 'التنقل الرئيسي' },
+  titlebar: { language: 'اللغة', theme: 'المظهر', minimize: 'تصغير', maximize: 'تكبير', restore: 'استعادة', close: 'إغلاق' },
+  theme: { system: 'النظام', light: 'فاتح', dark: 'داكن' },
+  lang: { en: 'الإنجليزية', ar: 'العربية' },
+  footer: { by: 'بواسطة', version: 'الإصدار', repository: 'المستودع', profile: 'ملف GitHub' },
+  common: { sample: 'بيانات تجريبية', unavailable: 'غير متاح', unknown: 'غير معروف', cancel: 'إلغاء', confirm: 'تأكيد', search: 'بحث', clear: 'مسح', paste: 'لصق', save: 'حفظ', error: 'خطأ', working: 'جارٍ التنفيذ…' },
+  status: { Resolving: 'جارٍ التحليل', FetchingMetadata: 'جلب المعلومات', Waiting: 'في الانتظار', Downloading: 'جارٍ التحميل', Paused: 'متوقف مؤقتا', PostProcessing: 'جارٍ المعالجة', Completed: 'مكتمل', Failed: 'فشل', Canceled: 'ملغى' },
+  filter: { all: 'الكل', downloading: 'جارٍ التحميل', waiting: 'في الانتظار', paused: 'متوقف مؤقتا', completed: 'مكتمل', failed: 'فشل', label: 'تصفية حسب الحالة' },
+  card: { compact: 'مضغوط', expanded: 'موسّع', expand: 'عرض التفاصيل', collapse: 'إخفاء التفاصيل', pause: 'إيقاف مؤقت', resume: 'استئناف', cancel: 'إلغاء', retry: 'إعادة المحاولة', openFolder: 'فتح المجلد', openFile: 'فتح الملف', rename: 'إعادة تسمية', source: 'المصدر', duration: 'المدة', format: 'الصيغة', quality: 'الجودة', savePath: 'مسار الحفظ', size: 'الحجم', speed: 'السرعة', eta: 'الوقت المتبقي', indeterminate: 'الحجم غير معروف', engineNote: 'الإجراءات معطلة حتى يتم ربط محرك التحميل.', noThumbnail: 'لا توجد صورة مصغرة', progress: 'تقدم التحميل', bestAvailable: 'أفضل جودة متاحة', playlist: 'عنصر في القائمة', audioOnly: 'صوت فقط', error: 'التفاصيل', editOptions: 'تعديل الإعدادات', saveOptions: 'حفظ الإعدادات' },
+  home: {
+    title: 'الرئيسية', subtitle: 'الصق رابطا أو أكثر لمحتوى يحق لك تحميله.',
+    placeholder: 'الصق الروابط هنا، رابط في كل سطر', inputLabel: 'روابط المحتوى', hideOptions: 'إخفاء الإعدادات', invalidLinks: 'روابط غير صالحة', noValidLinks: 'الصق رابطا صالحا واحدا على الأقل أولا.',
+    add: 'بدء التحميل', previewLinks: 'معاينة الروابط', previewing: 'جارٍ قراءة معلومات الوسائط…', addSelected: 'إضافة المحدد', reviewTitle: 'مراجعة المحتوى قبل التحميل', reviewHint: 'حدد الفيديوهات المطلوبة. سيتم إضافة كل عنصر من القائمة كمهمة تحميل مستقلة.', selectedVideos: 'محدد', selectAll: 'تحديد الكل', deselectAll: 'إلغاء تحديد الكل', selectAtLeastOne: 'حدد فيديو واحدا على الأقل للمتابعة.', playlistLimit: 'حد المعاينة:', validate: 'فحص الروابط', lines: 'الروابط المقبولة', options: 'إعدادات التحميل', format: 'الصيغة', quality: 'جودة الفيديو', audioOnly: 'الصوت فقط', audioQuality: 'جودة الصوت', subtitles: 'تحميل الترجمة', subtitleLanguages: 'لغات الترجمة', startTime: 'وقت البداية (HH:MM:SS)', endTime: 'وقت النهاية (HH:MM:SS)', outputDirectory: 'الحفظ في مجلد', browse: 'استعراض', outputName: 'اسم الملف (اختياري)', adding: 'جارٍ إضافة المهام…',
+    engineBanner: 'استخدم BVD فقط مع المحتوى الذي تملكه أو لديك تصريح بتحميله. دعم المواقع والصيغ المتاحة قد يتغير.',
+    queue: 'قائمة الانتظار', empty: 'القائمة فارغة', emptyHint: 'أضف رابطا في الأعلى للبدء.',
+    pauseAll: 'إيقاف الكل مؤقتا', resumeAll: 'استئناف الكل', clearCompleted: 'مسح المكتمل',
+    legal: 'تطبيق BVD مخصص للمحتوى الذي تملكه أو يحق لك تحميله. لا يتجاوز حماية DRM أو الاشتراكات المدفوعة أو المحتوى الخاص أو قيود الوصول.'
+  },
+  validation: { malformed: 'رابط غير صالح', unsupportedProtocol: 'يدعم التطبيق روابط http و https فقط', duplicate: 'رابط مكرر', accepted: 'صالح', rejected: 'مرفوض' },
+  downloads: { title: 'التحميلات', subtitle: 'أدر جميع المهام من مكان واحد.', searchPlaceholder: 'ابحث بالعنوان أو المصدر', sortBy: 'ترتيب حسب', sortDate: 'تاريخ الإضافة', sortName: 'الاسم', sortStatus: 'الحالة', sortSize: 'الحجم المعروف', noResults: 'لا توجد تحميلات مطابقة', selectAll: 'تحديد الكل', bulkPause: 'إيقاف المحدد مؤقتا', bulkResume: 'استئناف المحدد', bulkCancel: 'إلغاء المحدد', selected: 'محدد' },
+  history: { title: 'السجل', subtitle: 'تظهر هنا التحميلات المكتملة والفاشلة.', empty: 'لا يوجد سجل بعد', emptyHint: 'ستظهر التحميلات المنتهية هنا مع تفاصيل ملفاتها الفعلية.', openFile: 'فتح الملف', openFolder: 'فتح المجلد', downloadAgain: 'تحميل مرة أخرى', copyLink: 'نسخ رابط المصدر', remove: 'إزالة من السجل', removeNote: 'إزالة عنصر من السجل لا تحذف ملف الوسائط أبدا.' },
+  settings: {
+    title: 'الإعدادات', subtitle: 'تُحفظ التفضيلات تلقائيا.',
+    notReady: 'غير متاح بعد', notReadyBody: 'هذا القسم مخطط لمرحلة لاحقة وليس له أي تأثير الآن.', phase: 'مخطط للمرحلة',
+    sections: { general: 'عام', appearance: 'المظهر', language: 'اللغة', downloads: 'التحميلات', video: 'الفيديو', audio: 'الصوت', subtitles: 'الترجمة', notifications: 'الإشعارات والأصوات', updates: 'التحديثات', advanced: 'متقدم' },
+    appearance: { theme: 'المظهر', themeHint: 'خيار النظام يتبع تفضيل ويندوز الفاتح أو الداكن.', sidebar: 'الشريط الجانبي', sidebarHint: 'اختر حالة الشريط الجانبي عند التشغيل.', cards: 'شكل بطاقات التحميل', cardsHint: 'الشكل الافتراضي لبطاقات التحميل.', expandedSidebar: 'موسّع', collapsedSidebar: 'مطوي' },
+    language: { label: 'لغة الواجهة', hint: 'يُطبَّق التغيير فورا. تستخدم العربية تخطيطا من اليمين إلى اليسار.' },
+    downloads: { folder: 'مجلد التحميل الافتراضي', folderHint: 'تُحفظ التحميلات الجديدة في هذا المجلد ما لم تختر مكانا آخر.', chooseFolder: 'اختيار مجلد', concurrency: 'عدد التحميلات المتزامنة', concurrencyHint: 'الحد الأقصى للتحميلات التي تعمل في نفس الوقت.', openFolder: 'فتح مجلد التحميلات' },
+    generalHint: 'يحفظ BVD تفضيلات البرنامج محليا. يمكنك تحديد مجلد الحفظ وعدد التحميلات المتزامنة من قسم التحميلات.', optionsInHome: 'اختر الصيغة والجودة والوقت والترجمة من الصفحة الرئيسية قبل إضافة الرابط.',
+    advanced: { title: 'بيانات التطبيق المحلية', description: 'تُحفظ ملفات أصوات الإشعارات في مجلد بيانات التطبيق بنظام Windows. لا يحفظ BVD بيانات تسجيل الدخول أو ملفات تعريف الارتباط.' },
+    notifications: { inApp: 'إشعارات داخل البرنامج', desktop: 'إشعارات Windows', sounds: 'أصوات الإشعارات', volume: 'مستوى الصوت', test: 'تجربة', openFolder: 'فتح مجلد الأصوات', restore: 'استعادة الأصوات الافتراضية', choose: 'تغيير الصوت', event: 'نوع الإشعار', started: 'بدء التحميل', completed: 'اكتمال التحميل', failed: 'فشل التحميل', queued: 'إضافة للقائمة', paused: 'إيقاف التحميل مؤقتا', resumed: 'استكمال التحميل', canceled: 'إلغاء التحميل', update: 'تحديث متاح', updateDownloaded: 'تم تنزيل التحديث', inAppCol: 'داخل البرنامج', desktopCol: 'سطح المكتب', soundCol: 'الصوت' },
+    updates: { checking: 'جارٍ التحقق من التحديثات…', current: 'أنت تستخدم أحدث إصدار.', available: 'يتوفر إصدار جديد.', install: 'تنزيل التحديث وتثبيته', portable: 'تقوم نسخة Portable بتنزيل الملف التنفيذي الجديد والتحقق منه ثم استبدال النسخة الحالية بعد إغلاق BVD.', openRelease: 'فتح صفحة الإصدار', failed: 'تعذر التحقق من التحديثات.' }
+  },
+  about: { title: 'حول', version: 'الإصدار المثبّت', developer: 'المطوّر', profile: 'ملف GitHub', repository: 'المستودع', license: 'الترخيص', licenseStatus: 'MIT License', updates: 'التحديثات', checkUpdates: 'التحقق من التحديثات', updatesDisabled: 'لا يوجد إصدار عام منشور حاليا. أعد التحقق بعد نشر إصدار جديد.', openRepository: 'فتح المستودع', releaseNotes: 'ملاحظات الإصدار', releaseNotesNone: 'لم يُنشر أي إصدار بعد.', buildType: 'النسخة', buildDev: 'تطوير', buildPackaged: 'مُجمّعة', updateAvailable: 'يتوفر إصدار أحدث.', updateCurrent: 'أنت تستخدم أحدث إصدار.', updateError: 'تعذر التحقق من التحديثات.', installUpdate: 'تنزيل التحديث وتثبيته', openUpdate: 'فتح صفحة الإصدار', portableUpdate: 'يتم تنزيل تحديث النسخة المحمولة والتحقق منه ثم استبدال الملف التنفيذي بعد إغلاق BVD.' },
+  sample: { source: 'مصدر تجريبي' }
+}

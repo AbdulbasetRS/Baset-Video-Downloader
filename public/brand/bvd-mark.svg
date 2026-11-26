@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 128 128" role="img" aria-label="BVD brand mark">
+  <defs>
+    <linearGradient id="bg" x1="14" y1="8" x2="114" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38BDF8"/>
+      <stop offset=".48" stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="24" y1="15" x2="84" y2="92" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity=".24"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#07152F" flood-opacity=".28"/>
+    </filter>
+  </defs>
+  <rect x="5" y="5" width="118" height="118" rx="30" fill="url(#bg)"/>
+  <path d="M35 6h58c16 0 29 13 29 29v29C92 91 59 111 25 109 9 91 5 70 5 45V35C5 19 18 6 35 6Z" fill="url(#shine)"/>
+  <g fill="#DCEBFF" opacity=".9">
+    <rect x="15" y="48" width="9" height="9" rx="2.5"/>
+    <rect x="15" y="64" width="9" height="9" rx="2.5" opacity=".68"/>
+    <rect x="27" y="57" width="7" height="7" rx="2" opacity=".78"/>
+  </g>
+  <path d="M48 31.5c-3.8-2.2-8.5.55-8.5 4.95v42.9c0 4.4 4.7 7.15 8.5 4.95l36.8-21.45c3.8-2.2 3.8-7.7 0-9.9L48 31.5Z" fill="#FFFFFF" filter="url(#shadow)"/>
+  <g filter="url(#shadow)">
+    <circle cx="91" cy="91" r="25" fill="#0B1B3A" stroke="#93C5FD" stroke-width="2.5"/>
+    <path d="M91 75v25m0 0-10-10m10 10 10-10" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M77 104v4c0 2.2 1.8 4 4 4h20c2.2 0 4-1.8 4-4v-4" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>

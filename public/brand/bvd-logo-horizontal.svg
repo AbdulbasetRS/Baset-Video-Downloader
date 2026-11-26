@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="150" viewBox="0 0 1000 150" role="img" aria-label="Baset Video Downloader horizontal logo">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#38BDF8"/><stop offset=".5" stop-color="#2563EB"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient></defs>
+  <rect x="8" y="8" width="134" height="134" rx="34" fill="url(#g)"/>
+  <path d="M59 42c-4-2.3-9 .6-9 5.2v50c0 4.6 5 7.5 9 5.2l42-25c4-2.3 4-8.1 0-10.4L59 42Z" fill="#fff"/>
+  <circle cx="107" cy="105" r="27" fill="#0B1B3A" stroke="#93C5FD" stroke-width="3"/>
+  <path d="M107 87v28m0 0-10-10m10 10 10-10M94 120v3c0 2 1.5 3.5 3.5 3.5h19c2 0 3.5-1.5 3.5-3.5v-3" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="174" y="94" fill="#0F172A" font-family="Manrope, Segoe UI, Arial, sans-serif" font-size="54" font-weight="750" letter-spacing="-1.7">Baset Video Downloader</text>
+  <text x="178" y="128" fill="#2563EB" font-family="Manrope, Segoe UI, Arial, sans-serif" font-size="18" font-weight="800" letter-spacing="5">B V D</text>
+</svg>

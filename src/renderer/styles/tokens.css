@@ -1,0 +1,72 @@
+/* BVD design tokens. Solid colors only: no gradients, images, or wallpapers. */
+:root {
+  --primary: #2563eb;
+  --primary-light: #38bdf8;
+  --primary-dark: #1d4ed8;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #38bdf8;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  --titlebar-h: 56px;
+  --footer-h: 48px;
+  --sidebar-w: 232px;
+  --sidebar-w-collapsed: 72px;
+
+  --font-en: 'Manrope', 'Segoe UI', sans-serif;
+  --font-ar: 'Cairo', 'Segoe UI', sans-serif;
+  --font-sans: var(--font-en);
+  --font-mono: 'Cascadia Mono', Consolas, monospace;
+
+  color-scheme: light;
+}
+
+:root,
+:root[data-theme='light'] {
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --surface-2: #eef2f8;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #d9e2ef;
+  --primary-ink: #ffffff;
+  --primary-soft: #e3edff;
+  --success-ink: #15803d;
+  --warning-ink: #b45309;
+  --danger-ink: #b91c1c;
+  --info-ink: #0369a1;
+  --shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.05);
+  --focus: #1d4ed8;
+}
+
+:root[data-theme='dark'] {
+  --bg: #0b1120;
+  --surface: #151f32;
+  --surface-2: #1b2740;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --border: #26354d;
+  --primary-ink: #ffffff;
+  --primary-soft: #1a2a4f;
+  --success-ink: #4ade80;
+  --warning-ink: #fbbf24;
+  --danger-ink: #f87171;
+  --info-ink: #7dd3fc;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.28);
+  --focus: #38bdf8;
+  color-scheme: dark;
+}
+
+:root[lang='ar'] {
+  --font-sans: var(--font-ar);
+}

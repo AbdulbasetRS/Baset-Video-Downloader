@@ -1,0 +1,78 @@
+name: Build and publish Windows release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows-release:
+    runs-on: windows-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.2
+          cache: npm
+      - name: Validate release tag
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        run: |
+          $package = Get-Content package.json -Raw | ConvertFrom-Json
+          $tagVersion = '${{ github.ref_name }}'.TrimStart('v')
+          if ($package.version -ne $tagVersion) {
+            throw "Tag version $tagVersion does not match package.json version $($package.version)."
+          }
+      - name: Install dependencies
+        run: npm ci
+      - name: Prepare bundled Windows tools
+        run: npm run prepare:tools:win
+      - name: Verify bundled Windows tools
+        run: npm run verify:tools:win
+      - name: Run quality checks
+        run: npm run check
+      - name: Build Electron bundles
+        run: npm run build
+      - name: Package Installer and Portable executable
+        run: npx electron-builder --win nsis portable --x64 --publish never
+      - name: Add third-party notices and checksums
+        shell: pwsh
+        run: |
+          Copy-Item LICENSE release/LICENSE.txt -Force
+          Copy-Item THIRD-PARTY-NOTICES.md release/THIRD-PARTY-NOTICES.md -Force
+          $lines = Get-ChildItem release -File -Filter '*.exe' | ForEach-Object {
+            $hash = (Get-FileHash -Algorithm SHA256 $_.FullName).Hash.ToLowerInvariant()
+            "$hash  $($_.Name)"
+          }
+          if (-not $lines) { throw 'No Windows executable artifacts were produced.' }
+          $lines | Set-Content release/checksums.txt -Encoding ascii
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: BVD-Windows-${{ github.ref_name }}
+          path: |
+            release/*.exe
+            release/checksums.txt
+            release/LICENSE.txt
+            release/THIRD-PARTY-NOTICES.md
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Baset Video Downloader ${{ github.ref_name }}
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          files: |
+            release/BVD-Setup-*.exe
+            release/BVD-Portable-*.exe
+            release/checksums.txt
+            release/LICENSE.txt
+            release/THIRD-PARTY-NOTICES.md

@@ -1,0 +1,53 @@
+/* BVD logo motion system — calm, accessible, low-distraction. */
+.bvd-logo-motion {
+  display: inline-grid;
+  place-items: center;
+  transform-origin: 50% 55%;
+  filter: drop-shadow(0 14px 28px rgba(37, 99, 235, 0.22));
+  animation: bvd-logo-float 4.8s ease-in-out infinite,
+             bvd-logo-shadow 4.8s ease-in-out infinite;
+  will-change: transform, filter;
+}
+
+.bvd-logo-motion img,
+.bvd-logo-motion svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.bvd-logo-motion--small {
+  animation-duration: 5.6s;
+  filter: drop-shadow(0 7px 16px rgba(37, 99, 235, 0.18));
+}
+
+@keyframes bvd-logo-float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-4px) scale(1.012); }
+}
+
+@keyframes bvd-logo-shadow {
+  0%, 100% { filter: drop-shadow(0 14px 28px rgba(37, 99, 235, 0.20)); }
+  50% { filter: drop-shadow(0 18px 34px rgba(37, 99, 235, 0.28)); }
+}
+
+/* Use only for short loading transitions, never as an always-on page effect. */
+.bvd-logo-motion--enter {
+  animation: bvd-logo-enter 520ms cubic-bezier(.2,.75,.25,1) both,
+             bvd-logo-float 4.8s ease-in-out 520ms infinite;
+}
+
+@keyframes bvd-logo-enter {
+  from { opacity: 0; transform: translateY(8px) scale(.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bvd-logo-motion,
+  .bvd-logo-motion--small,
+  .bvd-logo-motion--enter {
+    animation: none !important;
+    transform: none !important;
+    will-change: auto;
+  }
+}
