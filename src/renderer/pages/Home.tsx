@@ -9,6 +9,8 @@ import type { MediaContainer, MediaPreview } from '../../shared/tasks'
 import { TaskCard } from '../components/TaskCard'
 import { TaskFilters, matchesFilter, type StatusFilter } from '../components/TaskFilters'
 import { EmptyState } from '../components/EmptyState'
+import { Select } from '../components/Select'
+import { TimeRangeControl, timeToSeconds } from '../components/TimeRangeControl'
 
 interface PreviewItem {
   url: string
@@ -59,6 +61,19 @@ export function HomePage() {
 
   const parsed = useMemo(() => parseSourceUrls(text), [text])
   const visibleTasks = tasks.filter((task) => matchesFilter(task, filter)).slice(0, 8)
+  const trimDurationSeconds = previewResults.length === 1 && !previewResults[0].preview.isPlaylist
+    ? previewResults[0].preview.durationSeconds
+    : null
+  const trimError = (() => {
+    if (!startTime.trim() && !endTime.trim()) return null
+    if (!startTime.trim() || !endTime.trim()) return t.home.timeRangeRequired
+    const start = timeToSeconds(startTime)
+    const end = timeToSeconds(endTime)
+    if (start === null || end === null) return t.home.timeRangeInvalid
+    if (end <= start) return t.home.timeRangeOrder
+    if (trimDurationSeconds !== null && end > trimDurationSeconds) return t.home.timeRangeBeyondDuration
+    return null
+  })()
 
   async function paste() {
     const clip = await window.bvd.clipboard.readText()
@@ -89,6 +104,7 @@ export function HomePage() {
   }
   async function startDownloads() {
     setError(null)
+    if (trimError) { setError(trimError); return }
     const requests = previewResults.map((bundle) => ({
       url: bundle.sourceUrl,
       ...(bundle.preview.isPlaylist ? { selectedEntryUrls: bundle.selectedUrls } : {}),
@@ -152,11 +168,10 @@ export function HomePage() {
           <>
             <h2 style={{ margin: '8px 0 0', fontSize: 16 }}>{t.home.options}</h2>
             <div className="form-grid">
-              <div className="form-field"><label htmlFor="format">{t.home.format}</label><select id="format" value={format} onChange={(e) => { const value = e.target.value as MediaContainer; setFormat(value); setAudioOnly(['mp3', 'm4a', 'wav'].includes(value)) }}><option value="mp4">MP4</option><option value="mkv">MKV</option><option value="webm">WEBM</option><option value="mp3">MP3</option><option value="m4a">M4A</option><option value="wav">WAV</option></select></div>
-              <div className="form-field"><label htmlFor="quality">{t.home.quality}</label><select id="quality" value={quality} onChange={(e) => setQuality(e.target.value as typeof quality)} disabled={audioOnly}><option value="best">{t.card.bestAvailable}</option><option value="2160">2160p</option><option value="1440">1440p</option><option value="1080">1080p</option><option value="720">720p</option><option value="480">480p</option><option value="360">360p</option></select></div>
-              <div className="form-field"><label htmlFor="audio-quality">{t.home.audioQuality}</label><select id="audio-quality" value={audioQuality} onChange={(e) => setAudioQuality(e.target.value as typeof audioQuality)}><option value="best">{t.card.bestAvailable}</option><option value="320">320 kbps</option><option value="256">256 kbps</option><option value="192">192 kbps</option><option value="128">128 kbps</option></select></div>
-              <div className="form-field"><label htmlFor="start-time">{t.home.startTime}</label><input id="start-time" value={startTime} onChange={(e) => setStartTime(e.target.value)} placeholder="00:00:00" inputMode="numeric" /></div>
-              <div className="form-field"><label htmlFor="end-time">{t.home.endTime}</label><input id="end-time" value={endTime} onChange={(e) => setEndTime(e.target.value)} placeholder="00:00:00" inputMode="numeric" /></div>
+              <div className="form-field"><label>{t.home.format}</label><Select label={t.home.format} value={format} onChange={(value) => { const next = value as MediaContainer; setFormat(next); setAudioOnly(['mp3', 'm4a', 'wav'].includes(next)) }} options={[{ value: 'mp4', label: 'MP4' }, { value: 'mkv', label: 'MKV' }, { value: 'webm', label: 'WEBM' }, { value: 'mp3', label: 'MP3' }, { value: 'm4a', label: 'M4A' }, { value: 'wav', label: 'WAV' }]} /></div>
+              <div className="form-field"><label>{t.home.quality}</label><Select label={t.home.quality} value={quality} onChange={(value) => setQuality(value as typeof quality)} disabled={audioOnly} options={[{ value: 'best', label: t.card.bestAvailable }, ...['2160', '1440', '1080', '720', '480', '360'].map((value) => ({ value, label: value + 'p' }))]} /></div>
+              <div className="form-field"><label>{t.home.audioQuality}</label><Select label={t.home.audioQuality} value={audioQuality} onChange={(value) => setAudioQuality(value as typeof audioQuality)} options={[{ value: 'best', label: t.card.bestAvailable }, ...['320', '256', '192', '128'].map((value) => ({ value, label: value + ' kbps' }))]} /></div>
+              <div className="time-range-field"><TimeRangeControl startTime={startTime} endTime={endTime} durationSeconds={trimDurationSeconds} startLabel={t.home.startTime} endLabel={t.home.endTime} durationLabel={t.card.duration} previewHint={t.home.timeRangePreviewHint} onChange={(start, end) => { setStartTime(start); setEndTime(end) }} />{trimError && <p className="time-range__error" role="alert">{trimError}</p>}</div>
               <div className="form-field"><label htmlFor="subtitle-languages">{t.home.subtitleLanguages}</label><input id="subtitle-languages" value={subtitleLanguages} onChange={(e) => setSubtitleLanguages(e.target.value)} placeholder="en,ar" disabled={!subtitleEnabled || audioOnly} /></div>
               <div className="form-field"><label htmlFor="output-name">{t.home.outputName}</label><input id="output-name" value={outputName} onChange={(e) => setOutputName(e.target.value)} placeholder="" /></div>
             </div>
