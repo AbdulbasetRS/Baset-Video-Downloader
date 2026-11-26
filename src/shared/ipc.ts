@@ -15,7 +15,7 @@ export const IPC = {
   notificationsEvent: 'notifications:event', notificationsSoundEvent: 'notifications:sound-event', notificationsSoundData: 'notifications:sound-data',
   notificationsOpenFolder: 'notifications:open-folder', notificationsPickSound: 'notifications:pick-sound',
   notificationsRestoreSounds: 'notifications:restore-sounds', notificationsTest: 'notifications:test',
-  updatesCheck: 'updates:check', updatesInstall: 'updates:install', updatesProgress: 'updates:progress'
+  updatesCheck: 'updates:check', updatesDownload: 'updates:download', updatesApply: 'updates:apply', updatesProgress: 'updates:progress'
 } as const
 
 export interface AppInfo { version: string; platform: NodeJS.Platform; isPackaged: boolean; isMaximized: boolean; portable: boolean }
@@ -46,5 +46,5 @@ export interface BvdApi {
     pickSound(event: NotificationEvent): Promise<boolean>; restoreSounds(): Promise<void>; test(event: NotificationEvent): Promise<void>;
     onEvent(listener: (payload: NotificationPayload) => void): () => void; onSoundEvent(listener: (event: NotificationEvent) => void): () => void
   }
-  updates: { check(): Promise<UpdateInfo>; install(): Promise<void>; onProgress(listener: (percent: number) => void): () => void }
+  updates: { check(): Promise<UpdateInfo>; download(): Promise<void>; apply(): Promise<void>; onProgress(listener: (percent: number) => void): () => void }
 }
