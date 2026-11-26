@@ -4,24 +4,33 @@ A Windows desktop application for downloading and organizing media that you own 
 
 **Developer:** Abdulbaset R. Sayed · [GitHub](https://github.com/AbdulBasetRS)  
 **Repository:** [AbdulbasetRS/Baset-Video-Downloader](https://github.com/AbdulbasetRS/Baset-Video-Downloader)  
-**Current release:** `v1.0.0`
+**Current release:** `v1.1.0`
 
 ## Download for Windows
 
-**Latest version: [v1.0.0](https://github.com/AbdulbasetRS/Baset-Video-Downloader/releases/tag/v1.0.0)**
+**Latest version: [v1.1.0](https://github.com/AbdulbasetRS/Baset-Video-Downloader/releases/tag/v1.1.0)**
 
 Choose the version that suits you:
 
 | Download | Description |
 |---|---|
-| [**Windows Installer**](https://github.com/AbdulbasetRS/Baset-Video-Downloader/releases/download/v1.0.0/BVD-Setup-1.0.0-x64.exe) | Recommended. Installs BVD and creates Start Menu/Desktop shortcuts. |
-| [**Portable Version**](https://github.com/AbdulbasetRS/Baset-Video-Downloader/releases/download/v1.0.0/BVD-Portable-1.0.0-x64.exe) | Runs without a traditional installation. Keep it in a writable folder. |
+| [**Windows Installer**](https://github.com/AbdulbasetRS/Baset-Video-Downloader/releases/download/v1.1.0/BVD-Setup-1.1.0-x64.exe) | Recommended. Installs BVD and creates Start Menu/Desktop shortcuts. |
+| [**Portable Version**](https://github.com/AbdulbasetRS/Baset-Video-Downloader/releases/download/v1.1.0/BVD-Portable-1.1.0-x64.exe) | Runs without a traditional installation. Keep it in a writable folder. |
+| [**SHA-256 checksums**](https://github.com/AbdulbasetRS/Baset-Video-Downloader/releases/download/v1.1.0/checksums.txt) | Verify the downloaded installer or portable executable. |
 
 **Requirements:** Windows 10/11 (64-bit).
 
 You can also [view all releases](https://github.com/AbdulbasetRS/Baset-Video-Downloader/releases).
 
 > **Windows SmartScreen notice:** The current Windows builds are not code-signed, so Windows may show "Windows protected your PC" or "Unknown publisher". This warning is related to the app's unsigned status and reputation; it does not by itself mean the file contains malware. Only download BVD from this official GitHub repository, and do not disable Microsoft Defender or SmartScreen.
+
+## What's new in v1.1.0
+
+- Interactive start/end time controls for trimming downloads, with editable HH:MM:SS values.
+- Improved download completion verification and output-file detection.
+- Custom dropdown controls and UI refinements.
+- Improved update flow: download an update first, then choose when to restart and install it.
+- Improved language selection and application details.
 
 ## What is implemented in this source
 
@@ -43,7 +52,7 @@ You can also [view all releases](https://github.com/AbdulbasetRS/Baset-Video-Dow
 - Private/login-only media, DRM, paywalls and access-control bypass are not supported. No browser cookies or account credentials are imported.
 - Playlist previews are capped at 500 entries to avoid unbounded memory and UI load. A longer playlist is not fully enumerated by the current version.
 - Format conversion and trimming depend on the bundled FFmpeg build. The output file is verified after the downloader exits, but a failed/canceled download can leave a partial file.
-- The app has not been exercised against every source site or on a clean Windows computer from this environment. The first public release should be treated as a beta until the release workflow and installer are verified on Windows.
+- The app has not been tested against every source site or on every Windows configuration. Compatibility may vary depending on the source website and system environment.
 - Windows builds are currently unsigned. SmartScreen may show a warning until the publisher signs the application and builds reputation.
 
 ## Development on Windows
@@ -70,8 +79,8 @@ The installers are written to `release/`. `resources/tools/win32-x64/` is genera
 ## Build and publish with GitHub Actions
 
 1. Push the project source to `main` in the official repository.
-2. Confirm `package.json` version and the tag match (currently `1.0.0` / `v1.0.0`).
-3. Push a tag that matches the package version (for example, `v1.0.0` for version `1.0.0`).
+2. Confirm `package.json` version and the tag match (currently `1.1.0` / `v1.1.0`).
+3. Push a tag that matches the package version (for example, `v1.1.0` for version `1.1.0`).
 4. The `Build and publish Windows release` workflow runs on `windows-latest`, runs checks, fetches yt-dlp/FFmpeg/Node, verifies tool binaries, builds both EXEs, creates checksums and publishes a GitHub Release.
 5. Review the Actions log and download the workflow artifacts before announcing the release.
 
@@ -97,7 +106,7 @@ No emoji, no platform logos or platform imagery, Lucide icons only, solid backgr
 
 ## License
 
-BVD source code uses the MIT License. Third-party components remain subject to their respective licenses; see [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) and the `resources/tools/win32-x64/licenses/` folder in Windows builds.
+BVD source code uses the MIT License. Third-party components remain subject to their respective licenses; see [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md) and the `resources/tools/win32-x64/licenses/` folder in Windows builds.
 
 ## Legal use
 
