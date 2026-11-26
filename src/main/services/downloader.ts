@@ -76,6 +76,7 @@ function commonArgs(url: string, tools: { ffmpegDir: string; node: string }): st
   return args
 }
 function safeOutputName(value: string): string {
+  // eslint-disable-next-line no-control-regex -- Intentionally remove filesystem control characters from user-provided filenames.
   const normalized = value.normalize('NFKC').replace(/[\\/:*?"<>|\u0000-\u001F]/g, '_').replace(/[. ]+$/g, '').trim()
   return normalized.slice(0, 120)
 }
