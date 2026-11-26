@@ -392,7 +392,11 @@ function startTask(task: DownloadTask): void {
         void pumpQueue()
       })
       child.once('close', async (code) => {
-        // Process any final stdout fragment before reading the task's outputPath.
+        // The print marker can be emitted on either stream depending on the
+        // extractor and post-processing path. Inspect both final stream buffers.
+        for (const line of record.stderr.split(/[\r\n]+/)) {
+          if (line.includes('__BVD_FILE__')) processStdoutLine(line)
+        }
         if (record.stdoutBuffer.trim()) processStdoutLine(record.stdoutBuffer)
         record.stdoutBuffer = ''
         children.delete(task.id)
