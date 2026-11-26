@@ -12,6 +12,9 @@ New-Item -ItemType Directory -Force -Path $toolsRoot, $ffmpegRoot, $licensesRoot
 
 function Get-GitHubAsset($Repository, $AssetName) {
   $headers = @{ 'User-Agent' = 'Baset-Video-Downloader-Build'; 'Accept' = 'application/vnd.github+json' }
+  if ($env:GITHUB_TOKEN) {
+    $headers['Authorization'] = "Bearer $($env:GITHUB_TOKEN)"
+  }
   $release = Invoke-RestMethod -Uri "https://api.github.com/repos/$Repository/releases/latest" -Headers $headers
   $asset = $release.assets | Where-Object { $_.name -eq $AssetName } | Select-Object -First 1
   if (-not $asset) { throw "Could not find '$AssetName' in the latest $Repository release." }
@@ -45,6 +48,9 @@ Copy-Item $ytPath (Join-Path $toolsRoot 'yt-dlp.exe') -Force
 
 # FFmpeg LGPL static build. A static package avoids missing-DLL failures on clean Windows installations.
 $ffHeaders = @{ 'User-Agent' = 'Baset-Video-Downloader-Build'; 'Accept' = 'application/vnd.github+json' }
+if ($env:GITHUB_TOKEN) {
+  $ffHeaders['Authorization'] = "Bearer $($env:GITHUB_TOKEN)"
+}
 $ffRelease = Invoke-RestMethod -Uri 'https://api.github.com/repos/FFmpeg-Builds/FFmpeg-Builds/releases/latest' -Headers $ffHeaders
 $ffAsset = $ffRelease.assets | Where-Object { $_.name -match '^ffmpeg-n8\.1\..*-win64-lgpl-8\.1\.zip$' } | Select-Object -First 1
 if (-not $ffAsset) { throw "Could not find a current win64 LGPL static FFmpeg archive in release $($ffRelease.tag_name)." }
