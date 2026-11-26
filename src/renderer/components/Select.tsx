@@ -74,6 +74,7 @@ export function Select({ value, options, onChange, label, disabled = false, clas
       <button
         id={id}
         type="button"
+        role="combobox"
         className="custom-select__trigger"
         aria-label={label}
         aria-haspopup="listbox"
