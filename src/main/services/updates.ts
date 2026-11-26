@@ -15,7 +15,7 @@ import { readTasks } from './task-store'
 interface GitHubAsset { name: string; browser_download_url: string; size: number }
 interface GitHubRelease { tag_name: string; html_url: string; body?: string; assets: GitHubAsset[]; prerelease: boolean; draft: boolean }
 let cachedUpdate: UpdateInfo | null = null
-let stagedUpdate: { scriptPath: string; version: string } | null = null
+let stagedUpdate: { scriptPath: string } | null = null
 
 function normalizeVersion(value: string): number[] {
   return value.replace(/^v/i, '').split(/[.+-]/).slice(0, 3).map((part) => Number.parseInt(part, 10) || 0)
@@ -144,14 +144,15 @@ export async function downloadLatestUpdate(): Promise<void> {
   await writeFile(scriptPath, script, 'utf8')
   // Stage the verified package and helper script only. The running application
   // remains open until the user explicitly chooses to apply the update.
-  stagedUpdate = { scriptPath, version: info.latestVersion }
+  stagedUpdate = { scriptPath }
 }
 
 export async function applyDownloadedUpdate(): Promise<void> {
-  if (!stagedUpdate) throw new Error('Download and verify the update before restarting to install it.')
+  const pending = stagedUpdate
+  if (!pending) throw new Error('Download and verify the update before restarting to install it.')
   const activeTasks = readTasks().filter((task) => ['Waiting', 'Resolving', 'FetchingMetadata', 'Downloading', 'PostProcessing'].includes(task.status))
   if (activeTasks.length) throw new Error('Pause or finish active downloads before installing a BVD update.')
-  const updater = spawn('powershell.exe', ['-NoProfile', '-WindowStyle', 'Hidden', '-ExecutionPolicy', 'Bypass', '-File', stagedUpdate.scriptPath], { detached: true, stdio: 'ignore', windowsHide: true })
+  const updater = spawn('powershell.exe', ['-NoProfile', '-WindowStyle', 'Hidden', '-ExecutionPolicy', 'Bypass', '-File', pending.scriptPath], { detached: true, stdio: 'ignore', windowsHide: true })
   updater.unref()
   app.quit()
 }
