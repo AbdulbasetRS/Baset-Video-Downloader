@@ -1,6 +1,6 @@
 import { app, BrowserWindow, dialog, shell } from 'electron'
 import { spawn, type ChildProcess } from 'node:child_process'
-import { access, mkdir, rename, stat } from 'node:fs/promises'
+import { access, mkdir, readdir, rename, stat } from 'node:fs/promises'
 import { constants } from 'node:fs'
 import { homedir } from 'node:os'
 import { basename, extname, join, resolve } from 'node:path'
@@ -12,7 +12,7 @@ import { getSettings } from '../settings-store'
 import { notify } from './notifications'
 import { readTasks, writeTasks } from './task-store'
 
-interface ProcessRecord { child: ChildProcess; stopReason: 'pause' | 'cancel' | null; stderr: string; stdoutBuffer: string; lastPersist: number }
+interface ProcessRecord { child: ChildProcess; stopReason: 'pause' | 'cancel' | null; stderr: string; stdoutBuffer: string; lastPersist: number; startedAt: number; outputPath: string | null }
 const children = new Map<string, ProcessRecord>()
 const starting = new Set<string>()
 let pumping = false
@@ -69,7 +69,7 @@ async function binaries(): Promise<{ ytDlp: string; ffmpegDir: string; node: str
   }
 }
 function commonArgs(url: string, tools: { ffmpegDir: string; node: string }): string[] {
-  const args = ['--ignore-config', '--no-warnings', '--no-call-home', '--newline', '--progress', '--progress-template', 'download:__BVD_PROGRESS__%(progress)j', '--print', 'after_move:__BVD_FILE__%(filepath)s', '--windows-filenames', '--continue']
+  const args = ['--ignore-config', '--no-warnings', '--no-call-home', '--no-colors', '--newline', '--progress', '--progress-template', 'download:__BVD_PROGRESS__%(progress)j', '--print', 'after_move:__BVD_FILE__%(filepath)s', '--windows-filenames', '--continue']
   args.push('--ffmpeg-location', tools.ffmpegDir)
   args.push('--js-runtimes', `node:${tools.node}`)
   args.push('--remote-components', 'ejs:github', url)
@@ -90,6 +90,33 @@ function timeToMilliseconds(value: string): number {
   const [seconds, fraction = '0'] = secondsPart.split('.')
   return (((Number(hours) * 60) + Number(minutes)) * 60 + Number(seconds)) * 1000 + Number(fraction.padEnd(3, '0').slice(0, 3))
 }
+async function findRecentOutput(task: DownloadTask, startedAt: number): Promise<string | null> {
+  try {
+    const allowedExtensions = task.options.audioOnly
+      ? new Set(['.mp3', '.m4a', '.wav'])
+      : new Set(['.mp4', '.mkv', '.webm', '.mov', '.m4v', '.avi', '.flv'])
+    const expectedPrefix = safeOutputName(task.options.outputName || task.title).toLocaleLowerCase()
+    const entries = await readdir(task.options.outputDirectory, { withFileTypes: true })
+    const candidates: Array<{ path: string; modifiedAt: number }> = []
+    for (const entry of entries) {
+      if (!entry.isFile() || !allowedExtensions.has(extname(entry.name).toLowerCase())) continue
+      const path = join(task.options.outputDirectory, entry.name)
+      try {
+        const info = await stat(path)
+        if (!info.isFile() || info.size <= 0 || info.mtimeMs < startedAt - 5000) continue
+        candidates.push({ path, modifiedAt: info.mtimeMs })
+      } catch { /* The file may have been moved by the media post-processor. */ }
+    }
+    const matching = expectedPrefix
+      ? candidates.filter((candidate) => basename(candidate.path).toLocaleLowerCase().startsWith(expectedPrefix))
+      : candidates
+    const pool = matching.length ? matching : candidates.length === 1 ? candidates : []
+    return pool.sort((a, b) => b.modifiedAt - a.modifiedAt)[0]?.path ?? null
+  } catch {
+    return null
+  }
+}
+
 function outputTemplate(task: DownloadTask): string {
   const requested = safeOutputName(task.options.outputName)
   const playlistSuffix = task.playlistCount && task.playlistIndex ? ` [${String(task.playlistIndex).padStart(3, '0')}]` : ''
@@ -324,21 +351,25 @@ function startTask(task: DownloadTask): void {
       if (!currentBeforeSpawn || currentBeforeSpawn.status !== 'Waiting') return
       const args = downloadArgs(currentBeforeSpawn, tools)
       const child = spawn(tools.ytDlp, args, { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'], shell: false, detached: process.platform !== 'win32' })
-      const record: ProcessRecord = { child, stopReason: null, stderr: '', stdoutBuffer: '', lastPersist: 0 }
+      const record: ProcessRecord = { child, stopReason: null, stderr: '', stdoutBuffer: '', lastPersist: 0, startedAt: Date.now(), outputPath: null }
       children.set(task.id, record)
-      const initial = updateTask(task.id, { status: 'Downloading', errorMessage: null })
+      const initial = updateTask(task.id, { status: 'Downloading', errorMessage: null, outputPath: null })
       if (initial) notify('downloadStarted', initial.title)
       const processStdoutLine = (line: string) => {
         // yt-dlp may emit the final after_move marker without a trailing newline.
         // Search within the line instead of requiring the marker at character zero.
-        const markerIndex = line.indexOf('__BVD_FILE__')
+        const cleanLine = line.replace(/\u001b\[[0-?]*[ -/]*[@-~]/g, '')
+        const markerIndex = cleanLine.indexOf('__BVD_FILE__')
         if (markerIndex >= 0) {
-          const file = line.slice(markerIndex + '__BVD_FILE__'.length).trim()
-          if (file) updateTask(task.id, { outputPath: file })
+          const file = cleanLine.slice(markerIndex + '__BVD_FILE__'.length).trim().replace(/^["']|["']$/g, '')
+          if (file) {
+            record.outputPath = file
+            updateTask(task.id, { outputPath: file })
+          }
         }
         const current = readTasks().find((x) => x.id === task.id)
         if (current) {
-          const next = parseProgressLine(line, current)
+          const next = parseProgressLine(cleanLine, current)
           if (next !== current && Date.now() - record.lastPersist > 350) { record.lastPersist = Date.now(); saveTask(next) }
         }
       }
@@ -369,13 +400,17 @@ function startTask(task: DownloadTask): void {
         const current = readTasks().find((x) => x.id === task.id)
         if (!current) { void pumpQueue(); return }
         if (code === 0) {
-          let file = current.outputPath || null
+          let file = record.outputPath || current.outputPath || null
           if (file) {
             try {
               const outputStat = await stat(file)
               if (!outputStat.isFile() || outputStat.size <= 0) file = null
             } catch { file = null }
           }
+          // Some extractors/post-processors do not emit the after_move marker
+          // consistently. Recover the newly-created media file by its title and
+          // modification time before marking a successful process as failed.
+          if (!file) file = await findRecentOutput(current, record.startedAt)
           if (!file) {
             const failed = updateTask(task.id, { status: 'Failed', speedBytesPerSec: null, etaSeconds: null, errorMessage: 'The downloader finished without producing a verifiable output file.' })
             if (failed) notify('downloadFailed', failed.title)
