@@ -153,6 +153,10 @@ export async function applyDownloadedUpdate(): Promise<void> {
   const activeTasks = readTasks().filter((task) => ['Waiting', 'Resolving', 'FetchingMetadata', 'Downloading', 'PostProcessing'].includes(task.status))
   if (activeTasks.length) throw new Error('Pause or finish active downloads before installing a BVD update.')
   const updater = spawn('powershell.exe', ['-NoProfile', '-WindowStyle', 'Hidden', '-ExecutionPolicy', 'Bypass', '-File', pending.scriptPath], { detached: true, stdio: 'ignore', windowsHide: true })
+  await new Promise<void>((resolve, reject) => {
+    updater.once('error', reject)
+    updater.once('spawn', resolve)
+  })
   updater.unref()
   app.quit()
 }
