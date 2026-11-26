@@ -3,7 +3,7 @@
   "productName": "Baset Video Downloader",
   "version": "1.0.0",
   "description": "BVD - Windows desktop media download manager",
-  "author": "AbdulBaset R. Sayed",
+  "author": "Abdulbaset R. Sayed",
   "private": true,
   "type": "module",
   "main": "./out/main/index.js",
