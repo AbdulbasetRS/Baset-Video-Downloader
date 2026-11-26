@@ -6,7 +6,7 @@ const EXTERNAL_LINKS: readonly { label: string; action: string; url: string }[] 
     { label: 'Buy Me a Coffee', action: 'Support on Buy Me a Coffee', url: 'https://buymeacoffee.com/abdulbaset' },
     { label: 'GitHub Sponsors', action: 'Become a Sponsor', url: 'https://github.com/sponsors/AbdulbasetRS' },
     { label: 'PayPal', action: 'Donate via PayPal', url: 'https://paypal.me/abdulbasetrs' }
-  ],
+  ]
 
 /**
  * Central, typed application configuration.
