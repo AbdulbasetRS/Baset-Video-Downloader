@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import { useId, type CSSProperties } from 'react'
 
 interface TimeRangeControlProps {
   startTime: string
@@ -26,6 +26,7 @@ export function secondsToTime(value: number): string {
 }
 
 export function TimeRangeControl({ startTime, endTime, durationSeconds, startLabel, endLabel, durationLabel, previewHint, onChange }: TimeRangeControlProps) {
+  const id = useId()
   const duration = durationSeconds && Number.isFinite(durationSeconds) ? Math.max(1, Math.floor(durationSeconds)) : null
   const parsedStart = startTime ? timeToSeconds(startTime) : 0
   const parsedEnd = endTime ? timeToSeconds(endTime) : duration
@@ -40,12 +41,12 @@ export function TimeRangeControl({ startTime, endTime, durationSeconds, startLab
     <div className="time-range">
       <div className="time-range__inputs">
         <div className="form-field">
-          <label htmlFor="start-time">{startLabel}</label>
-          <input id="start-time" type="text" inputMode="numeric" dir="ltr" value={startTime} placeholder="00:00:00" maxLength={10} onChange={(event) => onChange(event.target.value, endTime)} />
+          <label htmlFor={`${id}-start-time`}>{startLabel}</label>
+          <input id={`${id}-start-time`} type="text" inputMode="numeric" dir="ltr" value={startTime} placeholder="00:00:00" maxLength={10} onChange={(event) => onChange(event.target.value, endTime)} />
         </div>
         <div className="form-field">
-          <label htmlFor="end-time">{endLabel}</label>
-          <input id="end-time" type="text" inputMode="numeric" dir="ltr" value={endTime} placeholder={duration ? secondsToTime(duration) : '00:00:00'} maxLength={10} onChange={(event) => onChange(startTime, event.target.value)} />
+          <label htmlFor={`${id}-end-time`}>{endLabel}</label>
+          <input id={`${id}-end-time`} type="text" inputMode="numeric" dir="ltr" value={endTime} placeholder={duration ? secondsToTime(duration) : '00:00:00'} maxLength={10} onChange={(event) => onChange(startTime, event.target.value)} />
         </div>
       </div>
       <div className="time-range__visual">
