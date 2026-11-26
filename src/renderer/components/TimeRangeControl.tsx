@@ -34,7 +34,7 @@ export function TimeRangeControl({ startTime, endTime, durationSeconds, startLab
   const rangeStyle = {
     '--range-start': duration ? `${(start / duration) * 100}%` : '0%',
     '--range-end': duration ? `${(end / duration) * 100}%` : '100%'
-  } as CSSProperties
+  } as CSSProperties & { '--range-start': string; '--range-end': string }
 
   return (
     <div className="time-range">
