@@ -11,7 +11,7 @@ import {
   previewMedia, removeHistory, renameTaskFile, resumeAll, resumeDownload, retryDownload, updateTaskOptions
 } from './services/downloader'
 import { initializeSounds, notify, openSoundsFolder, pickSound, restoreSounds, soundData } from './services/notifications'
-import { checkForUpdates, installLatestUpdate } from './services/updates'
+import { applyDownloadedUpdate, checkForUpdates, downloadLatestUpdate } from './services/updates'
 
 type Guard = (url: string) => boolean
 function windowFor(event: IpcMainInvokeEvent): BrowserWindow | null { return BrowserWindow.fromWebContents(event.sender) }
@@ -81,5 +81,6 @@ export function registerIpc(isAppUrl: Guard): void {
   handle(IPC.notificationsTest, isAppUrl, eventSchema, (event) => notify(event, getSettings().language === 'ar' ? 'اختبار الصوت والإشعار.' : 'This is a notification test.'))
 
   handle(IPC.updatesCheck, isAppUrl, null, () => checkForUpdates())
-  handle(IPC.updatesInstall, isAppUrl, null, () => installLatestUpdate())
+  handle(IPC.updatesDownload, isAppUrl, null, () => downloadLatestUpdate())
+  handle(IPC.updatesApply, isAppUrl, null, () => applyDownloadedUpdate())
 }

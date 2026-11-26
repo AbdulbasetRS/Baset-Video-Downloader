@@ -4,6 +4,8 @@ import type { DownloadOptions, DownloadTask, MediaContainer } from '../../shared
 import { useT } from '../hooks/useT'
 import { formatBytes, formatDuration, formatPercent, formatSpeed } from '../format'
 import { StatusBadge } from './StatusBadge'
+import { Select } from './Select'
+import { TimeRangeControl, timeToSeconds } from './TimeRangeControl'
 
 interface Props {
   task: DownloadTask
@@ -64,10 +66,18 @@ export function TaskCard({ task, mode, selected, onToggleSelect, onPause, onResu
   }
 
   async function saveOptions() {
+    if (draft.startTime || draft.endTime) {
+      if (!draft.startTime?.trim() || !draft.endTime?.trim()) { setOptionsError(t.home.timeRangeRequired); return }
+      const start = timeToSeconds(draft.startTime)
+      const end = timeToSeconds(draft.endTime)
+      if (start === null || end === null) { setOptionsError(t.home.timeRangeInvalid); return }
+      if (end <= start) { setOptionsError(t.home.timeRangeOrder); return }
+      if (task.durationSeconds !== null && end > task.durationSeconds) { setOptionsError(t.home.timeRangeBeyondDuration); return }
+    }
     setSavingOptions(true)
     setOptionsError(null)
     try {
-      await window.bvd.downloads.updateOptions(task.id, draft)
+      await window.bvd.downloads.updateOptions(task.id, { ...draft, startTime: draft.startTime?.trim() || null, endTime: draft.endTime?.trim() || null })
       setEditingOptions(false)
     } catch (error) {
       setOptionsError(error instanceof Error ? error.message : String(error))
@@ -134,15 +144,10 @@ export function TaskCard({ task, mode, selected, onToggleSelect, onPause, onResu
           {editingOptions && (
             <div className="task__editor" style={{ gridColumn: '1 / -1' }}>
               <div className="form-grid">
-                <div className="form-field"><label>{t.home.format}</label><select value={draft.container} onChange={(event) => { const container = event.target.value as MediaContainer; updateDraft({ container, audioOnly: AUDIO_FORMATS.includes(container) }) }}>
-                  <option value="mp4">MP4</option><option value="mkv">MKV</option><option value="webm">WEBM</option><option value="mp3">MP3</option><option value="m4a">M4A</option><option value="wav">WAV</option>
-                </select></div>
-                <div className="form-field"><label>{t.home.quality}</label><select value={draft.quality} disabled={draft.audioOnly} onChange={(event) => updateDraft({ quality: event.target.value as DownloadOptions['quality'] })}>
-                  <option value="best">{t.card.bestAvailable}</option><option value="2160">2160p</option><option value="1440">1440p</option><option value="1080">1080p</option><option value="720">720p</option><option value="480">480p</option><option value="360">360p</option>
-                </select></div>
-                {draft.audioOnly && <div className="form-field"><label>{t.home.audioQuality}</label><select value={draft.audioQuality} onChange={(event) => updateDraft({ audioQuality: event.target.value as DownloadOptions['audioQuality'] })}><option value="best">{t.card.bestAvailable}</option><option value="320">320 kbps</option><option value="256">256 kbps</option><option value="192">192 kbps</option><option value="128">128 kbps</option></select></div>}
-                <div className="form-field"><label>{t.home.startTime}</label><input value={draft.startTime || ''} placeholder="00:00:00" onChange={(event) => updateDraft({ startTime: event.target.value || null })} /></div>
-                <div className="form-field"><label>{t.home.endTime}</label><input value={draft.endTime || ''} placeholder="00:00:00" onChange={(event) => updateDraft({ endTime: event.target.value || null })} /></div>
+                <div className="form-field"><label>{t.home.format}</label><Select label={t.home.format} value={draft.container} onChange={(value) => { const container = value as MediaContainer; updateDraft({ container, audioOnly: AUDIO_FORMATS.includes(container) }) }} options={['mp4', 'mkv', 'webm', 'mp3', 'm4a', 'wav'].map((value) => ({ value, label: value.toUpperCase() }))} /></div>
+                <div className="form-field"><label>{t.home.quality}</label><Select label={t.home.quality} value={draft.quality} disabled={draft.audioOnly} onChange={(value) => updateDraft({ quality: value as DownloadOptions['quality'] })} options={[{ value: 'best', label: t.card.bestAvailable }, ...['2160', '1440', '1080', '720', '480', '360'].map((value) => ({ value, label: value + 'p' }))]} /></div>
+                {draft.audioOnly && <div className="form-field"><label>{t.home.audioQuality}</label><Select label={t.home.audioQuality} value={draft.audioQuality} onChange={(value) => updateDraft({ audioQuality: value as DownloadOptions['audioQuality'] })} options={[{ value: 'best', label: t.card.bestAvailable }, ...['320', '256', '192', '128'].map((value) => ({ value, label: value + ' kbps' }))]} /></div>}
+                <div className="time-range-field"><TimeRangeControl startTime={draft.startTime || ''} endTime={draft.endTime || ''} durationSeconds={task.durationSeconds} startLabel={t.home.startTime} endLabel={t.home.endTime} durationLabel={t.card.duration} previewHint={t.home.timeRangePreviewHint} onChange={(start, end) => updateDraft({ startTime: start || null, endTime: end || null })} /></div>
                 <div className="form-field"><label>{t.home.outputName}</label><input value={draft.outputName} onChange={(event) => updateDraft({ outputName: event.target.value })} /></div>
                 <div className="form-field"><label>{t.home.subtitleLanguages}</label><input value={draft.subtitleLanguages.join(',')} disabled={!draft.subtitleEnabled || draft.audioOnly} onChange={(event) => updateDraft({ subtitleLanguages: event.target.value.split(',').map((value) => value.trim()).filter(Boolean).slice(0, 10) })} /></div>
               </div>

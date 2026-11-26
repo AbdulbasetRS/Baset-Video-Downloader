@@ -18,7 +18,7 @@ export const APP_CONFIG = {
   appId: 'com.abdulbasetrs.bvd',
   tagline: 'Download \u00B7 Manage \u00B7 Enjoy',
   developer: {
-    name: 'AbdulBaset R. Sayed',
+    name: 'Abdulbaset R. Sayed',
     profileUrl: 'https://github.com/AbdulBasetRS'
   },
   github: {

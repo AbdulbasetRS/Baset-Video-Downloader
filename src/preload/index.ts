@@ -70,7 +70,8 @@ const api: BvdApi = {
   },
   updates: {
     check: () => ipcRenderer.invoke(IPC.updatesCheck),
-    install: () => ipcRenderer.invoke(IPC.updatesInstall),
+    download: () => ipcRenderer.invoke(IPC.updatesDownload),
+    apply: () => ipcRenderer.invoke(IPC.updatesApply),
     onProgress: (listener) => {
       const handler = (_event: Electron.IpcRendererEvent, percent: number) => listener(percent)
       ipcRenderer.on(IPC.updatesProgress, handler)

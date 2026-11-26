@@ -2,7 +2,7 @@
 
 A Windows desktop application for downloading and organizing media that you own or are authorized to download.
 
-**Developer:** AbdulBaset R. Sayed · [GitHub](https://github.com/AbdulBasetRS)  
+**Developer:** Abdulbaset R. Sayed · [GitHub](https://github.com/AbdulBasetRS)  
 **Repository:** [AbdulbasetRS/Baset-Video-Downloader](https://github.com/AbdulbasetRS/Baset-Video-Downloader)  
 **Current release:** `v1.0.0`
 

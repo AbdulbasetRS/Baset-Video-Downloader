@@ -5,6 +5,8 @@ import type { NotificationEvent } from '../../shared/settings'
 import { useT } from '../hooks/useT'
 import { useSettingsStore } from '../store/settings-store'
 import { Segmented } from '../components/Segmented'
+import { Select } from '../components/Select'
+import { languageOptions } from '../i18n'
 
  type SectionId = 'general' | 'appearance' | 'language' | 'downloads' | 'video' | 'audio' | 'subtitles' | 'notifications' | 'updates' | 'advanced'
 const SECTIONS: { id: SectionId; icon: ReactNode }[] = [
@@ -65,11 +67,11 @@ export function SettingsPage() {
             <div className="setting"><div><div className="setting__label">{t.settings.appearance.cards}</div><div className="setting__hint">{t.settings.appearance.cardsHint}</div></div><Segmented label={t.settings.appearance.cards} value={settings.cardMode} onChange={(cardMode) => void update({ cardMode })} options={[{ value: 'compact', label: t.card.compact }, { value: 'expanded', label: t.card.expanded }]} /></div>
           </>}
 
-          {section === 'language' && <div className="setting"><div><div className="setting__label">{t.settings.language.label}</div><div className="setting__hint">{t.settings.language.hint}</div></div><Segmented label={t.settings.language.label} value={settings.language} onChange={(language) => void update({ language })} options={[{ value: 'en', label: 'English' }, { value: 'ar', label: 'العربية' }]} /></div>}
+          {section === 'language' && <div className="setting"><div><div className="setting__label">{t.settings.language.label}</div><div className="setting__hint">{t.settings.language.hint}</div></div><Select label={t.settings.language.label} value={settings.language} onChange={(language) => void update({ language })} options={languageOptions.map(({ code, label }) => ({ value: code, label }))} /></div>}
 
           {section === 'downloads' && <>
             <div className="setting"><div><div className="setting__label">{t.settings.downloads.folder}</div><div className="setting__hint">{settings.defaultOutputDirectory || t.common.unknown}</div></div><button className="btn" onClick={() => void chooseFolder()}><FolderOpen size={16} aria-hidden="true" />{t.settings.downloads.chooseFolder}</button></div>
-            <div className="setting"><div><div className="setting__label">{t.settings.downloads.concurrency}</div><div className="setting__hint">{t.settings.downloads.concurrencyHint}</div></div><select className="field" value={settings.maxConcurrentDownloads} onChange={(e) => void update({ maxConcurrentDownloads: Number(e.target.value) })}><option value={1}>1</option><option value={2}>2</option><option value={3}>3</option><option value={4}>4</option><option value={5}>5</option></select></div>
+            <div className="setting"><div><div className="setting__label">{t.settings.downloads.concurrency}</div><div className="setting__hint">{t.settings.downloads.concurrencyHint}</div></div><Select label={t.settings.downloads.concurrency} value={String(settings.maxConcurrentDownloads)} onChange={(value) => void update({ maxConcurrentDownloads: Number(value) })} options={[1, 2, 3, 4, 5].map((value) => ({ value: String(value), label: String(value) }))} /></div>
             <div className="row settings__actions"><button className="btn" onClick={() => void window.bvd.downloads.openDefaultFolder()}><FolderOpen size={16} aria-hidden="true" />{t.settings.downloads.openFolder}</button></div>
           </>}
 
@@ -98,13 +100,13 @@ export function SettingsPage() {
 
           {section === 'updates' && <>
             <div className="notice"><Info size={18} aria-hidden="true" /><span>{t.settings.updates.portable}</span></div>
-            <button className="btn btn--primary" onClick={() => void (async () => {
+            <div className="row settings__actions"><button className="btn btn--primary" onClick={() => void (async () => {
               setMessage(null)
               try {
                 const result = await window.bvd.updates.check()
                 setMessage(result.available ? `${t.about.updateAvailable} · ${result.latestVersion}` : t.settings.updates.current)
               } catch (error) { setMessage(error instanceof Error ? error.message : t.settings.updates.failed) }
-            })()}><RefreshCw size={16} aria-hidden="true" />{t.about.checkUpdates}</button>
+            })()}><RefreshCw size={16} aria-hidden="true" />{t.about.checkUpdates}</button></div>
           </>}
           {(section === 'general' || section === 'video' || section === 'audio' || section === 'subtitles') && <div className="notice"><Info size={18} aria-hidden="true" /><span>{section === 'video' || section === 'audio' || section === 'subtitles' ? t.settings.optionsInHome : t.settings.generalHint}</span></div>}
           {section === 'advanced' && <div className="setting"><div><div className="setting__label">{t.settings.advanced.title}</div><div className="setting__hint">{t.settings.advanced.description}</div></div><button className="btn" onClick={() => void window.bvd.notifications.openFolder()}><FolderOpen size={15}/>{t.settings.notifications.openFolder}</button></div>}

@@ -25,7 +25,7 @@ export const settingsSchema = z.object({
   defaultOutputDirectory: z.string().max(2048),
   maxConcurrentDownloads: z.number().int().min(1).max(5),
   theme: z.enum(THEME_MODES),
-  language: z.enum(LANGUAGES),
+  language: z.string().regex(/^[a-z]{2}(?:-[A-Z]{2})?$/).max(16),
   sidebarMode: z.enum(SIDEBAR_MODES),
   cardMode: z.enum(CARD_MODES),
   notifications: z.object({

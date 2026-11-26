@@ -15,6 +15,7 @@ import { readTasks } from './task-store'
 interface GitHubAsset { name: string; browser_download_url: string; size: number }
 interface GitHubRelease { tag_name: string; html_url: string; body?: string; assets: GitHubAsset[]; prerelease: boolean; draft: boolean }
 let cachedUpdate: UpdateInfo | null = null
+let stagedUpdate: { scriptPath: string } | null = null
 
 function normalizeVersion(value: string): number[] {
   return value.replace(/^v/i, '').split(/[.+-]/).slice(0, 3).map((part) => Number.parseInt(part, 10) || 0)
@@ -83,7 +84,8 @@ async function downloadAsset(url: string, destination: string, minimumBytes = 10
   }
   if (reportProgress) for (const win of BrowserWindow.getAllWindows()) win.webContents.send(IPC.updatesProgress, 100)
 }
-export async function installLatestUpdate(): Promise<void> {
+export async function downloadLatestUpdate(): Promise<void> {
+  stagedUpdate = null
   const activeTasks = readTasks().filter((task) => ['Waiting', 'Resolving', 'FetchingMetadata', 'Downloading', 'PostProcessing'].includes(task.status))
   if (activeTasks.length) throw new Error('Pause or finish active downloads before installing a BVD update.')
   const info = cachedUpdate ?? await checkForUpdates()
@@ -140,7 +142,21 @@ export async function installLatestUpdate(): Promise<void> {
         'Start-Process -FilePath $application'
       ].join('\r\n')
   await writeFile(scriptPath, script, 'utf8')
-  const updater = spawn('powershell.exe', ['-NoProfile', '-WindowStyle', 'Hidden', '-ExecutionPolicy', 'Bypass', '-File', scriptPath], { detached: true, stdio: 'ignore', windowsHide: true })
+  // Stage the verified package and helper script only. The running application
+  // remains open until the user explicitly chooses to apply the update.
+  stagedUpdate = { scriptPath }
+}
+
+export async function applyDownloadedUpdate(): Promise<void> {
+  const pending = stagedUpdate
+  if (!pending) throw new Error('Download and verify the update before restarting to install it.')
+  const activeTasks = readTasks().filter((task) => ['Waiting', 'Resolving', 'FetchingMetadata', 'Downloading', 'PostProcessing'].includes(task.status))
+  if (activeTasks.length) throw new Error('Pause or finish active downloads before installing a BVD update.')
+  const updater = spawn('powershell.exe', ['-NoProfile', '-WindowStyle', 'Hidden', '-ExecutionPolicy', 'Bypass', '-File', pending.scriptPath], { detached: true, stdio: 'ignore', windowsHide: true })
+  await new Promise<void>((resolve, reject) => {
+    updater.once('error', reject)
+    updater.once('spawn', resolve)
+  })
   updater.unref()
   app.quit()
 }

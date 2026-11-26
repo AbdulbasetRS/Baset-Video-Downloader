@@ -3,5 +3,5 @@ import { useSettingsStore } from '../store/settings-store'
 
 export function useT(): Dict {
   const language = useSettingsStore((s) => s.settings.language)
-  return dictionaries[language]
+  return dictionaries[language] ?? dictionaries.en
 }

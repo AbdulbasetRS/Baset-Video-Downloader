@@ -11,21 +11,35 @@ export function AboutPage() {
   const appInfo = useSettingsStore((s) => s.appInfo)
   const [checking, setChecking] = useState(false)
   const [installing, setInstalling] = useState(false)
+  const [applying, setApplying] = useState(false)
+  const [downloaded, setDownloaded] = useState(false)
   const [progress, setProgress] = useState(0)
   const [update, setUpdate] = useState<UpdateInfo | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   async function checkUpdates() {
-    setChecking(true); setError(null); setUpdate(null)
+    setChecking(true); setError(null); setUpdate(null); setDownloaded(false)
     try { setUpdate(await window.bvd.updates.check()) }
     catch (err) { setError(err instanceof Error ? err.message : t.about.updateError) }
     finally { setChecking(false) }
   }
-  async function install() {
+  async function downloadUpdate() {
     setInstalling(true); setError(null); setProgress(0)
     const off = window.bvd.updates.onProgress(setProgress)
-    try { await window.bvd.updates.install() }
-    catch (err) { setError(err instanceof Error ? err.message : t.about.updateError); setInstalling(false); off() }
+    try {
+      await window.bvd.updates.download()
+      setDownloaded(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t.about.updateError)
+    } finally {
+      setInstalling(false)
+      off()
+    }
+  }
+  async function applyUpdate() {
+    setApplying(true); setError(null)
+    try { await window.bvd.updates.apply() }
+    catch (err) { setError(err instanceof Error ? err.message : t.about.updateError); setApplying(false) }
   }
 
   return (
@@ -62,12 +76,16 @@ export function AboutPage() {
             <div className="setting__hint">{t.about.version}: <span className="ltr">{update.currentVersion}</span>{update.latestVersion ? ` → ${update.latestVersion}` : ''}</div>
             {update.releaseNotes && <p className="setting__hint">{update.releaseNotes}</p>}
             {update.available && <div className="row" style={{ marginTop: 8 }}>
-              <button className="btn btn--primary" onClick={() => void install()} disabled={installing}>{update.portable ? t.about.openUpdate : t.about.installUpdate}</button>
+              {!downloaded
+                ? <button className="btn btn--primary" onClick={() => void downloadUpdate()} disabled={installing}>{installing ? t.common.working : t.about.installUpdate}</button>
+                : <button className="btn btn--primary" onClick={() => void applyUpdate()} disabled={applying}>{t.about.applyUpdate}</button>}
+              {downloaded && <span className="setting__hint">{t.settings.updates.downloaded}</span>}
               {update.portable && <span className="setting__hint">{t.about.portableUpdate}</span>}
             </div>}
           </div>
         </div>}
         {installing && <div className="setting" style={{ marginTop: 10 }}><span>{t.common.working}</span><span className="ltr">{progress}%</span></div>}
+        {applying && <div className="setting" style={{ marginTop: 10 }}><span>{t.common.working}</span></div>}
         {error && <div className="notice notice--warning" role="alert" style={{ marginTop: 12 }}><AlertCircle size={18} aria-hidden="true" />{error}</div>}
         {!appInfo?.isPackaged && <p className="setting__hint">{t.about.updatesDisabled}</p>}
         <p className="setting__hint">{t.about.releaseNotesNone}</p>

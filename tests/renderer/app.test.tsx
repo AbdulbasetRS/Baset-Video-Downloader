@@ -32,7 +32,8 @@ describe('BVD application shell', () => {
   it('switches to Arabic and RTL immediately', async () => {
     const user = userEvent.setup()
     await renderApp()
-    await user.click(screen.getByRole('button', { name: 'العربية' }))
+    await user.click(screen.getByRole('combobox', { name: 'Language' }))
+    await user.click(screen.getByRole('option', { name: 'العربية' }))
     await waitFor(() => expect(document.documentElement.dir).toBe('rtl'))
     expect(document.documentElement.lang).toBe('ar')
     expect(screen.getByRole('navigation', { name: 'التنقل الرئيسي' })).toBeInTheDocument()
@@ -77,8 +78,8 @@ describe('BVD application shell', () => {
     const user = userEvent.setup()
     const { api } = await renderApp()
     const footer = screen.getByRole('contentinfo')
-    expect(footer).toHaveTextContent('AbdulBaset R. Sayed')
-    expect(footer).toHaveTextContent('0.2.0')
+    expect(footer).toHaveTextContent('Abdulbaset R. Sayed')
+    expect(footer).toHaveTextContent('1.0.0')
 
     await user.click(within(footer).getByRole('button', { name: 'Repository' }))
     expect(api.external.open).toHaveBeenCalledWith('https://github.com/AbdulBasetRS/Baset-Video-Downloader')
