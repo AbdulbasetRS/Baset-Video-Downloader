@@ -1,6 +1,7 @@
 $ErrorActionPreference = 'Stop'
 $root = Resolve-Path (Join-Path $PSScriptRoot '..')
 $toolsRoot = Join-Path $root 'resources/tools/win32-x64'
+$ffmpegRoot = Join-Path $toolsRoot 'ffmpeg'
 $ytDlp = Join-Path $toolsRoot 'yt-dlp.exe'
 $node = Join-Path $toolsRoot 'node.exe'
 $ffmpeg = Join-Path $toolsRoot 'ffmpeg/ffmpeg.exe'
