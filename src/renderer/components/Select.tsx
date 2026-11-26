@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react'
 import { ChevronDown } from 'lucide-react'
 
 export interface SelectOption {
@@ -41,7 +41,7 @@ export function Select({ value, options, onChange, label, disabled = false, clas
     setOpen(false)
   }
 
-  function handleKeyDown(event: React.KeyboardEvent<HTMLButtonElement>) {
+  function handleKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
     if (disabled) return
     if (event.key === 'Escape') { setOpen(false); return }
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
