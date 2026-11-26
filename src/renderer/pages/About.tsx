@@ -77,7 +77,7 @@ export function AboutPage() {
             {update.releaseNotes && <p className="setting__hint">{update.releaseNotes}</p>}
             {update.available && <div className="row" style={{ marginTop: 8 }}>
               {!downloaded
-                ? <button className="btn btn--primary" onClick={() => void downloadUpdate()} disabled={installing}>{installing ? t.settings.updates.checking : t.about.installUpdate}</button>
+                ? <button className="btn btn--primary" onClick={() => void downloadUpdate()} disabled={installing}>{installing ? t.common.working : t.about.installUpdate}</button>
                 : <button className="btn btn--primary" onClick={() => void applyUpdate()} disabled={applying}>{t.about.applyUpdate}</button>}
               {downloaded && <span className="setting__hint">{t.settings.updates.downloaded}</span>}
               {update.portable && <span className="setting__hint">{t.about.portableUpdate}</span>}
