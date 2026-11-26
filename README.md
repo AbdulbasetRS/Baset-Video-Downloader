@@ -4,20 +4,24 @@ A Windows desktop application for downloading and organizing media that you own 
 
 **Developer:** AbdulBaset R. Sayed · [GitHub](https://github.com/AbdulBasetRS)  
 **Repository:** [AbdulbasetRS/Baset-Video-Downloader](https://github.com/AbdulbasetRS/Baset-Video-Downloader)  
-**Current source version:** `0.2.0` (release candidate)
+**Current release:** `v1.0.0`
 
 ## Download for Windows
 
-The project is configured to publish two Windows x64 files through GitHub Releases:
+**Latest version: [v1.0.0](https://github.com/AbdulbasetRS/Baset-Video-Downloader/releases/tag/v1.0.0)**
 
-| File | Intended user |
+Choose the version that suits you:
+
+| Download | Description |
 |---|---|
-| `BVD-Setup-0.2.0-x64.exe` | Recommended. Runs the installer and creates Start Menu/Desktop shortcuts. |
-| `BVD-Portable-0.2.0-x64.exe` | Runs without a traditional installation. Keep it in a writable folder. |
+| [**Windows Installer**](https://github.com/AbdulbasetRS/Baset-Video-Downloader/releases/download/v1.0.0/BVD-Setup-1.0.0-x64.exe) | Recommended. Installs BVD and creates Start Menu/Desktop shortcuts. |
+| [**Portable Version**](https://github.com/AbdulbasetRS/Baset-Video-Downloader/releases/download/v1.0.0/BVD-Portable-1.0.0-x64.exe) | Runs without a traditional installation. Keep it in a writable folder. |
 
-**There is no public installer attached to the repository yet.** The source repository is currently prepared for a Windows GitHub Actions build. The first release is generated after the source has been pushed and tag `v0.2.0` is published. Do not download random EXE files from third-party mirrors.
+**Requirements:** Windows 10/11 (64-bit).
 
-When a release is available, open [GitHub Releases](https://github.com/AbdulbasetRS/Baset-Video-Downloader/releases), download one of the two BVD files, and run it on Windows 10/11 x64. Windows SmartScreen may show a reputation warning for an unsigned first release. Do not disable Defender or SmartScreen; verify the release checksums and only run files from the official repository.
+You can also [view all releases](https://github.com/AbdulbasetRS/Baset-Video-Downloader/releases).
+
+> **Windows SmartScreen notice:** The current Windows builds are not code-signed, so Windows may show "Windows protected your PC" or "Unknown publisher". This warning is related to the app's unsigned status and reputation; it does not by itself mean the file contains malware. Only download BVD from this official GitHub repository, and do not disable Microsoft Defender or SmartScreen.
 
 ## What is implemented in this source
 
@@ -66,12 +70,12 @@ The installers are written to `release/`. `resources/tools/win32-x64/` is genera
 ## Build and publish with GitHub Actions
 
 1. Push the project source to `main` in the official repository.
-2. Confirm `package.json` version and the tag match (currently `0.2.0` / `v0.2.0`).
-3. Push tag `v0.2.0` or a later matching version.
+2. Confirm `package.json` version and the tag match (currently `1.0.0` / `v1.0.0`).
+3. Push a tag that matches the package version (for example, `v1.0.0` for version `1.0.0`).
 4. The `Build and publish Windows release` workflow runs on `windows-latest`, runs checks, fetches yt-dlp/FFmpeg/Node, verifies tool binaries, builds both EXEs, creates checksums and publishes a GitHub Release.
 5. Review the Actions log and download the workflow artifacts before announcing the release.
 
-A PowerShell helper `PUBLISH-TO-GITHUB.ps1` is included for the repository owner. On Windows, extract the source, open PowerShell in the project folder, run `Set-ExecutionPolicy -Scope Process Bypass` and then `./PUBLISH-TO-GITHUB.ps1`. Review the staged changes and type `PUBLISH` only after reviewing the files and the MIT license. The helper pushes the current working tree to the configured official repository and pushes tag `v0.2.0`. Git for Windows and an authenticated GitHub session are required. If Git does not have an author identity yet, configure `git config --global user.name` and `git config --global user.email` with your own details first.
+A PowerShell helper `PUBLISH-TO-GITHUB.ps1` is included for the repository owner. On Windows, extract the source, open PowerShell in the project folder, run `Set-ExecutionPolicy -Scope Process Bypass` and then `./PUBLISH-TO-GITHUB.ps1`. Review the staged changes and type `PUBLISH` only after reviewing the files and the MIT license. The helper pushes the current working tree to the configured official repository and may publish the version tag configured in the script. Check the script's tag value before running it. Git for Windows and an authenticated GitHub session are required. If Git does not have an author identity yet, configure `git config --global user.name` and `git config --global user.email` with your own details first.
 
 ## Project scripts
 
