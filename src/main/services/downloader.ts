@@ -236,7 +236,7 @@ export async function addDownloads(requests: DownloadAddRequest[]): Promise<Down
       const selectedEntries = selected ? playlistEntries.filter((entry) => selected.has(entry.url)) : playlistEntries
       if (selected && selectedEntries.length === 0 && playlistEntries.length > 0) continue
       const items = playlistEntries.length
-        ? selectedEntries.map((entry, index) => ({
+        ? selectedEntries.map((entry) => ({
             url: entry.url, title: entry.title, description: null as string | null,
             durationSeconds: entry.durationSeconds, thumbnailUrl: entry.thumbnailUrl,
             extractorKey: entry.extractorKey,
