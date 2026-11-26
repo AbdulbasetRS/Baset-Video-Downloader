@@ -12,10 +12,24 @@ $ytVersion = (& $ytDlp --version).Trim()
 if ($LASTEXITCODE -ne 0) { throw 'yt-dlp failed its version check.' }
 $nodeVersion = (& $node --version).Trim()
 if ($LASTEXITCODE -ne 0) { throw 'Bundled Node runtime failed its version check.' }
-$ffmpegVersion = (& $ffmpeg -version 2>&1 | Select-Object -First 1).ToString()
-if ($LASTEXITCODE -ne 0) { throw 'FFmpeg failed its version check.' }
-$ffprobeVersion = (& $ffprobe -version 2>&1 | Select-Object -First 1).ToString()
-if ($LASTEXITCODE -ne 0) { throw 'ffprobe failed its version check.' }
+# Shared FFmpeg builds depend on DLLs shipped beside the executables.
+$env:PATH = "$ffmpegRoot;$env:PATH"
+
+$ffmpegOutput = @(& $ffmpeg -version 2>&1)
+$ffmpegExitCode = $LASTEXITCODE
+$ffmpegVersion = ($ffmpegOutput | Select-Object -First 1).ToString()
+if ($ffmpegExitCode -ne 0) {
+  $details = ($ffmpegOutput | ForEach-Object { $_.ToString() }) -join [Environment]::NewLine
+  throw "FFmpeg failed its version check (exit code $ffmpegExitCode). Output: $details"
+}
+
+$ffprobeOutput = @(& $ffprobe -version 2>&1)
+$ffprobeExitCode = $LASTEXITCODE
+$ffprobeVersion = ($ffprobeOutput | Select-Object -First 1).ToString()
+if ($ffprobeExitCode -ne 0) {
+  $details = ($ffprobeOutput | ForEach-Object { $_.ToString() }) -join [Environment]::NewLine
+  throw "ffprobe failed its version check (exit code $ffprobeExitCode). Output: $details"
+}
 Write-Host "yt-dlp: $ytVersion"
 Write-Host "Node: $nodeVersion"
 Write-Host $ffmpegVersion
