@@ -20,10 +20,10 @@ export const APP_CONFIG = {
     ownershipConfirmed: true
   },
   links: [
-    { label: 'LinkedIn', url: 'https://www.linkedin.com/in/abdulbaset-r-sayed' },
-    { label: 'Instagram', url: 'https://www.instagram.com/abdulbaset_rs/' },
-    { label: 'Facebook', url: 'https://www.facebook.com/AbdulBasetRedaSayed/' },
-    { label: 'X', url: 'https://x.com/AbdulBasetRS' },
+    { label: 'LinkedIn', action: 'LinkedIn', url: 'https://www.linkedin.com/in/abdulbaset-r-sayed' },
+    { label: 'Instagram', action: 'Instagram', url: 'https://www.instagram.com/abdulbaset_rs/' },
+    { label: 'Facebook', action: 'Facebook', url: 'https://www.facebook.com/AbdulBasetRedaSayed/' },
+    { label: 'X', action: 'X', url: 'https://x.com/AbdulBasetRS' },
     { label: 'Buy Me a Coffee', action: 'Support on Buy Me a Coffee', url: 'https://buymeacoffee.com/abdulbaset' },
     { label: 'GitHub Sponsors', action: 'Become a Sponsor', url: 'https://github.com/sponsors/AbdulbasetRS' },
     { label: 'PayPal', action: 'Donate via PayPal', url: 'https://paypal.me/abdulbasetrs' }
