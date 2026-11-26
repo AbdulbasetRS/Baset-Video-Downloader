@@ -3,6 +3,8 @@ import { Minus, Square, Copy, X, Sun, Moon, Monitor, Languages } from 'lucide-re
 import { useSettingsStore } from '../store/settings-store'
 import { useT } from '../hooks/useT'
 import { Segmented } from './Segmented'
+import { Select } from './Select'
+import { languageOptions } from '../i18n'
 import { APP_CONFIG } from '../../shared/config'
 
 export function TitleBar() {
@@ -21,14 +23,11 @@ export function TitleBar() {
       <div className="titlebar__spacer" />
       <div className="titlebar__tools">
         <Languages size={16} className="icon" aria-hidden="true" />
-        <Segmented
+        <Select
           label={t.titlebar.language}
           value={settings.language}
           onChange={(language) => void update({ language })}
-          options={[
-            { value: 'en', label: 'English' },
-            { value: 'ar', label: 'العربية' }
-          ]}
+          options={languageOptions.map(({ code, label }) => ({ value: code, label }))}
         />
         <Segmented
           label={t.titlebar.theme}
