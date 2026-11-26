@@ -13,6 +13,10 @@ describe('settings', () => {
     expect(sanitizeSettings({ theme: 'neon', language: 'ar' }).language).toBe('ar')
     expect(sanitizeSettings({ theme: 'neon', language: 'ar' }).theme).toBe('system')
   })
+  it('accepts future language codes without changing the settings schema', () => {
+    const next = applySettingsPatch(DEFAULT_SETTINGS, { language: 'fr' })
+    expect(next.language).toBe('fr')
+  })
   it('applies a valid patch and leaves other fields alone', () => {
     const next = applySettingsPatch(DEFAULT_SETTINGS, { language: 'ar' })
     expect(next.language).toBe('ar')
