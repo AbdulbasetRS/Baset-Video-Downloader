@@ -6,6 +6,7 @@ import { useDownloadStore } from '../store/download-store'
 import { TaskCard } from '../components/TaskCard'
 import { TaskFilters, matchesFilter, type StatusFilter } from '../components/TaskFilters'
 import { Segmented } from '../components/Segmented'
+import { Select } from '../components/Select'
 import { EmptyState } from '../components/EmptyState'
 
  type SortKey = 'date' | 'name' | 'status' | 'size'
@@ -48,7 +49,7 @@ export function DownloadsPage() {
       <div className="page__head"><h1>{t.downloads.title}</h1><p>{t.downloads.subtitle}</p></div>
       <div className="toolbar">
         <div className="field field--search row" style={{ gap: 8 }}><Search size={16} aria-hidden="true" className="icon" /><input type="search" aria-label={t.common.search} placeholder={t.downloads.searchPlaceholder} value={query} onChange={(e) => setQuery(e.target.value)} style={{ border: 0, background: 'transparent', outline: 'none', flex: 1, minWidth: 0 }} /></div>
-        <label className="row" style={{ gap: 8 }}><span className="setting__hint">{t.downloads.sortBy}</span><select className="field" value={sort} onChange={(e) => setSort(e.target.value as SortKey)}><option value="date">{t.downloads.sortDate}</option><option value="name">{t.downloads.sortName}</option><option value="status">{t.downloads.sortStatus}</option><option value="size">{t.downloads.sortSize}</option></select></label>
+        <label className="row" style={{ gap: 8 }}><span className="setting__hint">{t.downloads.sortBy}</span><Select label={t.downloads.sortBy} value={sort} onChange={(value) => setSort(value as SortKey)} options={[{ value: 'date', label: t.downloads.sortDate }, { value: 'name', label: t.downloads.sortName }, { value: 'status', label: t.downloads.sortStatus }, { value: 'size', label: t.downloads.sortSize }]} /></label>
         <Segmented label={t.settings.appearance.cards} value={settings.cardMode} onChange={(cardMode) => void update({ cardMode })} options={[{ value: 'compact', label: t.card.compact }, { value: 'expanded', label: t.card.expanded }]} />
       </div>
       <div className="toolbar">
