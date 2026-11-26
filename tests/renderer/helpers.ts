@@ -29,7 +29,7 @@ const preview: MediaPreview = {
 }
 
 const updateInfo: UpdateInfo = {
-  currentVersion: '0.2.0', latestVersion: '0.2.0', available: false,
+  currentVersion: '1.0.0', latestVersion: '1.0.0', available: false,
   releaseUrl: 'https://github.com/AbdulbasetRS/Baset-Video-Downloader/releases',
   setupAssetUrl: null, portableAssetUrl: null, checksumAssetUrl: null,
   releaseNotes: '', portable: false
@@ -45,7 +45,7 @@ export function installFakeBridge(initial: Partial<AppSettings> = {}): FakeBridg
       update: vi.fn(async (patch) => { state.settings = { ...state.settings, ...patch } as AppSettings; return state.settings }),
       onChanged: vi.fn(() => () => undefined)
     },
-    app: { info: vi.fn(async () => ({ version: '0.2.0', platform: 'win32' as const, isPackaged: false, isMaximized: false, portable: false })) },
+    app: { info: vi.fn(async () => ({ version: '1.0.0', platform: 'win32' as const, isPackaged: false, isMaximized: false, portable: false })) },
     window: {
       minimize: vi.fn(async () => undefined), toggleMaximize: vi.fn(async () => undefined), close: vi.fn(async () => undefined),
       onMaximizedChanged: vi.fn(() => () => undefined)
@@ -69,7 +69,7 @@ export function installFakeBridge(initial: Partial<AppSettings> = {}): FakeBridg
       onEvent: vi.fn(() => () => undefined), onSoundEvent: vi.fn(() => () => undefined)
     },
     updates: {
-      check: vi.fn(async () => updateInfo), install: vi.fn(async () => undefined), onProgress: vi.fn(() => () => undefined)
+      check: vi.fn(async () => updateInfo), download: vi.fn(async () => undefined), apply: vi.fn(async () => undefined), onProgress: vi.fn(() => () => undefined)
     }
   }
   window.bvd = api
