@@ -19,7 +19,7 @@ interface SelectProps {
 
 export function Select({ value, options, onChange, label, disabled = false, className = '', id }: SelectProps) {
   const generatedId = useId()
-  const listId = id || generatedId
+  const listId = id ? `${id}-listbox` : generatedId
   const rootRef = useRef<HTMLDivElement>(null)
   const [open, setOpen] = useState(false)
   const selectedIndex = Math.max(0, options.findIndex((option) => option.value === value))
