@@ -33,7 +33,7 @@ describe('TimeRangeControl', () => {
       previewHint="Preview one video first"
       onChange={() => undefined}
     />)
-    expect(screen.getAllByRole('slider').every((slider) => slider).toBeTruthy())
+    expect(screen.getAllByRole('slider')).toHaveLength(2)
     expect(screen.getAllByRole('slider')[0]).toBeDisabled()
     expect(screen.getByText('Preview one video first')).toBeInTheDocument()
   })
