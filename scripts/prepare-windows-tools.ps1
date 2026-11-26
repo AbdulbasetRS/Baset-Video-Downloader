@@ -31,7 +31,15 @@ Invoke-WebRequest -Uri "https://raw.githubusercontent.com/yt-dlp/yt-dlp/$($yt.Re
 $expectedLine = Get-Content $ytSumsPath | Where-Object { $_ -match '\s+yt-dlp\.exe$' } | Select-Object -First 1
 if (-not $expectedLine) { throw 'yt-dlp checksum entry is missing.' }
 $expectedHash = ($expectedLine -split '\s+')[0].ToLowerInvariant()
-$actualHash = (Get-FileHash -Algorithm SHA256 -Path $ytPath).Hash.ToLowerInvariant()
+$sha256 = [System.Security.Cryptography.SHA256]::Create()
+$ytStream = [System.IO.File]::OpenRead($ytPath)
+try {
+  $actualHash = [BitConverter]::ToString($sha256.ComputeHash($ytStream)).Replace('-', '').ToLowerInvariant()
+}
+finally {
+  $ytStream.Dispose()
+  $sha256.Dispose()
+}
 if ($expectedHash -ne $actualHash) { throw 'yt-dlp SHA-256 verification failed.' }
 Copy-Item $ytPath (Join-Path $toolsRoot 'yt-dlp.exe') -Force
 
