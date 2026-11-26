@@ -271,7 +271,7 @@ button:disabled { cursor: not-allowed; }
 .time-range__inputs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .time-range__inputs .form-field input { width: 100%; height: 36px; padding-inline: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md); font-family: var(--font-en); text-align: left; }
 .time-range__visual { display: flex; flex-direction: column; gap: 3px; min-width: 0; padding-block: 3px; }
-.time-range__slider { position: relative; display: flex; align-items: center; height: 30px; min-width: 0; }
+.time-range__slider { position: relative; display: flex; align-items: center; height: 30px; min-width: 0; direction: ltr; }
 .time-range__track, .time-range__selected { position: absolute; inset-block-start: 50%; height: 5px; transform: translateY(-50%); border-radius: 999px; }
 .time-range__track { inset-inline: 0; background: var(--surface-2); }
 .time-range__selected { left: var(--range-start); right: calc(100% - var(--range-end)); background: var(--primary); }
